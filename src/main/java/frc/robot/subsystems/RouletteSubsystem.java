@@ -14,6 +14,9 @@ import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
 
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -21,9 +24,12 @@ public class RouletteSubsystem extends SubsystemBase {
 
   private static RouletteSubsystem rouletteSubsystem;
   private TalonSRX rouletteTalon;
+  private Solenoid roulettSolenoid;
+
   private ColorSensorV3 rouletteColorSensor;
   private ColorMatch colorMatcher;
 
+  ColorMatchResult closestColor;
   private Color lastColor;
 
   /**
@@ -31,7 +37,8 @@ public class RouletteSubsystem extends SubsystemBase {
    */
   private RouletteSubsystem() {
     rouletteTalon = new TalonSRX(RouletteConstants.TalonID);
-    rouletteColorSensor = new ColorSensorV3(RouletteConstants.ColorPort); // maybe it work dont know
+    rouletteColorSensor = new ColorSensorV3(I2C.Port.kOnboard); // maybe it work dont know
+    roulettSolenoid = new Solenoid(RouletteConstants.SolenoidID);
     colorMatcher = new ColorMatch();
 
     colorMatcher.addColorMatch(RouletteConstants.Red);
@@ -51,10 +58,17 @@ public class RouletteSubsystem extends SubsystemBase {
     return rouletteSubsystem;
   }
 
+  public void printDashBoard() {
+    SmartDashboard.putNumber("Roulette talon voltage:", rouletteTalon.getBusVoltage());
+    SmartDashboard.putBoolean("Roulette solenoid state:", roulettSolenoid.get());
+    SmartDashboard.putString("Roulette Color:", closestColor.color.toString());
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    closestColor =  colorMatcher.matchClosestColor(getColor());
 
-    ColorMatchResult closestColor =  colorMatcher.matchClosestColor(getColor());
+    printDashBoard();
   }
 }

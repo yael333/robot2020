@@ -27,6 +27,6 @@ public class ElevatorDoubleSolenoidCommand extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    elevatorSubsystem.setDoubleSolenoid(!elevatorSubsystem.getDoubleSolenoid());
+    elevatorSubsystem.setDoubleSolenoid(!elevatorSubsystem.getSolenoid());
   }
 }

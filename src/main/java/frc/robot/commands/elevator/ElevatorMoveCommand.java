@@ -34,7 +34,9 @@ public class ElevatorMoveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    elevatorSubsystem.setMotor(RobotContainer.OperatingJoystick.getRawAxis(1));
+    if (elevatorSubsystem.getEncoder() <= ElevatorConstants.MaxHeight && elevatorSubsystem.getEncoder() >= ElevatorConstants.MinHeight) {
+      elevatorSubsystem.setMotor(RobotContainer.OperatingJoystick.getRawAxis(1));
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -46,6 +48,6 @@ public class ElevatorMoveCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return elevatorSubsystem.getEncoder() >= ElevatorConstants.MaxHeight || elevatorSubsystem.getEncoder() <= ElevatorConstants.MinHeight;
+    return false;
   }
 }

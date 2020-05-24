@@ -12,8 +12,7 @@ package frc.robot.Constants;
  */
 public final class ElevatorConstants {
     public static final int SparkMaxID = 8;
-    public static final int SolenoidFowardChannel = 0;
-    public static final int SolenoidReverseChannel = 1;
+    public static final int SolenoidChannel = 0;
 
     //placeholders
     public static final double MaxHeight = 1000;

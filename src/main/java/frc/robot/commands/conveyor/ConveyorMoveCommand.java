@@ -18,9 +18,10 @@ public class ConveyorMoveCommand extends CommandBase {
   /**
    * Creates a new ConveyorMoveCommand.
    */
-  public ConveyorMoveCommand() {
+  public ConveyorMoveCommand(double power) {
     conveyorSubsystem = ConveyorSubsystem.getInstance();
-
+    this.power = power;
+    
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(conveyorSubsystem);
   }

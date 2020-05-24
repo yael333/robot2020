@@ -14,6 +14,7 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeSubsystem extends SubsystemBase {
@@ -44,12 +45,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public boolean getDoubleSolenoid() {
-    if (intakeDoubleSolenoid.get() == Value.kForward) {
-      return true;
-    }
-    else {
-      return false;
-    }
+    return intakeDoubleSolenoid.get() == Value.kForward;
   }
 
   public static IntakeSubsystem getInstanace() {
@@ -59,8 +55,14 @@ public class IntakeSubsystem extends SubsystemBase {
     return intakeSubsystem;
   }
 
+  public void printDashBoard() {
+    SmartDashboard.putNumber("Intake Victor voltage:", intakeVictor.getBusVoltage());
+    SmartDashboard.putString("Intake Double Solenoid state:", intakeDoubleSolenoid.get().name());
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    printDashBoard();
   }
 }

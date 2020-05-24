@@ -12,6 +12,7 @@ import frc.robot.Constants.ClimbBalanceConstants;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ClimbBalanceSubsystem extends SubsystemBase {
@@ -23,7 +24,7 @@ public class ClimbBalanceSubsystem extends SubsystemBase {
    * Creates a new ClimbBalanceSubsystem.
    */
   private ClimbBalanceSubsystem() {
-    balanceSMX = new CANSparkMax(ClimbBalanceConstants.SparkMaxID, MotorType.fromId(ClimbBalanceConstants.SparkMaxID)); // not sure whats the motor type hopefully this function works
+    balanceSMX = new CANSparkMax(ClimbBalanceConstants.SparkMaxID, MotorType.kBrushless);
   }
 
   public void setMotor(double power) {
@@ -37,8 +38,13 @@ public class ClimbBalanceSubsystem extends SubsystemBase {
     return climbBalanceSubsystem;
   }
 
+  public void printDashBoard() {
+    SmartDashboard.putNumber("Balance SMX speed:", balanceSMX.get());
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    printDashBoard();
   }
 }

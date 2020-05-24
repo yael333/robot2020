@@ -9,7 +9,6 @@ package frc.robot.Constants;
 
 import com.revrobotics.ColorMatch;
 
-import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
 
 /**
@@ -17,7 +16,7 @@ import edu.wpi.first.wpilibj.util.Color;
  */
 public final class RouletteConstants {
   public static final int TalonID = 10;
-  public static final I2C.Port ColorPort = I2C.Port.kOnboard; // idk 
+  public static final int SolenoidID = -1;
 
   //colors (need chage real values)
   public static final Color Red = ColorMatch.makeColor(1, 0, 0);
