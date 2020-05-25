@@ -10,6 +10,14 @@ package frc.robot.Constants;
 /**
  * Add your docs here.
  */
-public final class RobotConstants {
-    public static final double tiksPerPulse = 1; //placeholder maybe??
+public final class ShooterConstants {
+    public static final int SparkMaxID1 = 5;
+    public static final int SparkMaxID2 = 6;
+    public static final int TalonID = 7;
+    public static final int IRID = 2;
+
+    public static final double Kp = 1;
+    public static final double Ki = 1;
+    public static final double Kd = 1;
+    public static final double PIDWaitTime = 5;
 }
