@@ -7,8 +7,10 @@
 
 package frc.robot.commands.roulette;
 
+import frc.robot.Constants.RouletteConstants;
 
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.RouletteSubsystem;
 
@@ -16,6 +18,8 @@ public class RoulettePIDCommand extends CommandBase {
 
   RouletteSubsystem rouletteSubsystem;
   int setpoint;
+  double lastTimeOnTarget;
+  double waitTime;
 
   /**
    * Creates a new RoulettePIDCommand.
@@ -23,6 +27,7 @@ public class RoulettePIDCommand extends CommandBase {
   public RoulettePIDCommand(Color wantedColor) {
     rouletteSubsystem = RouletteSubsystem.getInstance();
     this.setpoint = rouletteSubsystem.getColorEncoder() + rouletteSubsystem.getOptimalWay(wantedColor);
+    this.waitTime = RouletteConstants.PIDWaitTime;
     rouletteSubsystem.setReversed(setpoint < 0);
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -49,6 +54,9 @@ public class RoulettePIDCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (rouletteSubsystem.atSetpoint()) {
+      lastTimeOnTarget = Timer.getFPGATimestamp();
+    } 
+    return rouletteSubsystem.atSetpoint() && Timer.getFPGATimestamp() - lastTimeOnTarget > waitTime;
   }
 }

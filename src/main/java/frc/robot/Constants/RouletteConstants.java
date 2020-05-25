@@ -23,4 +23,9 @@ public final class RouletteConstants {
   public static final Color Yellow = ColorMatch.makeColor(0.7, 0.7, 0);
   public static final Color Green = ColorMatch.makeColor(0, 1, 0);
   public static final Color Blue = ColorMatch.makeColor(0, 0, 1);
+
+  public static final double Kp = 1;
+  public static final double Ki = 1;
+  public static final double Kd = 1;
+  public static final double PIDWaitTime = 5;
 }

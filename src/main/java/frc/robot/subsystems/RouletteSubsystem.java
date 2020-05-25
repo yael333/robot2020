@@ -51,6 +51,8 @@ public class RouletteSubsystem extends SubsystemBase {
     roulettSolenoid = new Solenoid(RouletteConstants.SolenoidID);
     colorMatcher = new ColorMatch();
 
+    colorPID = new PIDController(RouletteConstants.Kp, RouletteConstants.Ki, RouletteConstants.Kd);
+
     for (Color color: rouletteColors) {
       colorMatcher.addColorMatch(color);
     }
