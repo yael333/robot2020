@@ -1,18 +1,21 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
+/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.Constants;
+package frc.robot.triggers;
+
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.RobotContainer;
 
 /**
  * Add your docs here.
  */
-public final class IntakeConstants {
-    public static final int VictorID = 12;
-    public static final int SolenoidFowardChannel = 7;
-    public static final int SolenoidReverseChannel = 5;
-
+public class LeftTrigger extends Trigger {
+  @Override
+  public boolean get() {
+    return RobotContainer.OperatingJoystick.getAxisType(2) > 0.5;
+  }
 }

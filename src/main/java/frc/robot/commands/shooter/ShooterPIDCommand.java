@@ -40,12 +40,14 @@ public class ShooterPIDCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooterSubsystem.setMotor(shooterSubsystem.getPID(setpoint));
+    double power =  0.5; //shooterSubsystem.getPID(setpoint)
+    shooterSubsystem.setMotor(power);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    shooterSubsystem.setMotor(0);
   }
 
   // Returns true when the command should end.

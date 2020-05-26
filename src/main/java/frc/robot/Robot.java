@@ -18,8 +18,15 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import frc.robot.commands.Chassis.MAPath;
 import frc.robot.commands.Chassis.tankDrive;
-
+import frc.robot.commands.balance.ClimbBalanceMoveCommand;
+import frc.robot.commands.elevator.ElevatorMoveCommand;
 import frc.robot.subsystems.Chassis;
+import frc.robot.subsystems.ClimbBalanceSubsystem;
+import frc.robot.subsystems.ConveyorSubsystem;
+import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.RouletteSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 public class Robot extends TimedRobot {
 
@@ -42,6 +49,12 @@ public class Robot extends TimedRobot {
     MAPath.pathnum = 0;
     m_robotContainer = new RobotContainer();
 
+    IntakeSubsystem.getInstance();
+    RouletteSubsystem.getInstance();
+    ElevatorSubsystem.getInstance();
+    ConveyorSubsystem.getInstance();
+    ClimbBalanceSubsystem.getInstance();
+    ShooterSubsystem.getInstance();
   }
 
   @Override
@@ -117,6 +130,8 @@ public class Robot extends TimedRobot {
     Chassis.getinstance().resetValue();
     Chassis.getinstance().rampRate(0);
 
+    // CommandScheduler.getInstance().setDefaultCommand(ElevatorSubsystem.getInstance(), new ElevatorMoveCommand());
+    CommandScheduler.getInstance().setDefaultCommand(ClimbBalanceSubsystem.getInstance() , new ClimbBalanceMoveCommand());
   }
 
   /**

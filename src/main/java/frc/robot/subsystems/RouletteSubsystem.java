@@ -13,6 +13,7 @@ import java.util.Arrays;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
@@ -28,7 +29,7 @@ import edu.wpi.first.wpiutil.math.MathUtil;
 public class RouletteSubsystem extends SubsystemBase {
 
   private static RouletteSubsystem rouletteSubsystem;
-  private TalonSRX rouletteTalon;
+  private VictorSPX rouletteVictor;
   private Solenoid roulettSolenoid;
 
   private PIDController colorPID;
@@ -46,7 +47,7 @@ public class RouletteSubsystem extends SubsystemBase {
    * Creates a new RouletteSubsystem.
    */
   private RouletteSubsystem() {
-    rouletteTalon = new TalonSRX(RouletteConstants.TalonID);
+    rouletteVictor = new VictorSPX(RouletteConstants.VictorID);
     rouletteColorSensor = new ColorSensorV3(I2C.Port.kOnboard); // maybe it work dont know
     roulettSolenoid = new Solenoid(RouletteConstants.SolenoidID);
     colorMatcher = new ColorMatch();
@@ -59,7 +60,7 @@ public class RouletteSubsystem extends SubsystemBase {
   }
 
   public void setMotor(double power) {
-    rouletteTalon.set(ControlMode.PercentOutput, power);
+    rouletteVictor.set(ControlMode.PercentOutput, power);
   }
 
   public Color getColor() {
@@ -91,6 +92,14 @@ public class RouletteSubsystem extends SubsystemBase {
     return Math.abs(positive_way) > Math.abs(negative_way) ? positive_way : negative_way;
   }
 
+  public void setSolenoid(boolean state) {
+    roulettSolenoid.set(state);
+  }
+
+  public boolean getSolenoid() {
+    return roulettSolenoid.get();
+  }
+
   public static RouletteSubsystem getInstance() {
     if (rouletteSubsystem == null) {
       rouletteSubsystem = new RouletteSubsystem();
@@ -99,7 +108,7 @@ public class RouletteSubsystem extends SubsystemBase {
   }
 
   public void printDashBoard() {
-    SmartDashboard.putNumber("Roulette talon voltage:", rouletteTalon.getBusVoltage());
+    SmartDashboard.putNumber("Roulette talon voltage:", rouletteVictor.getBusVoltage());
     SmartDashboard.putBoolean("Roulette solenoid state:", roulettSolenoid.get());
     SmartDashboard.putString("Roulette Color:", closestColor.color.toString());
   }

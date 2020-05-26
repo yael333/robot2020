@@ -35,7 +35,7 @@ public class ElevatorMoveCommand extends CommandBase {
   @Override
   public void execute() {
     if (elevatorSubsystem.getEncoder() <= ElevatorConstants.MaxHeight && elevatorSubsystem.getEncoder() >= ElevatorConstants.MinHeight) {
-      elevatorSubsystem.setMotor(RobotContainer.OperatingJoystick.getRawAxis(1));
+      elevatorSubsystem.setMotor(RobotContainer.OperatingJoystick.getAxisType(1));
     }
   }
 

@@ -5,25 +5,25 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.balance;
-
-import frc.robot.RobotContainer;
+package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ClimbBalanceSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
-public class ClimbBalanceMoveCommand extends CommandBase {
+public class ShooterConveyorCommand extends CommandBase {
 
-  ClimbBalanceSubsystem climbBalanceSubsystem;
+  ShooterSubsystem shooterSubsystem;
+  double power;
 
   /**
-   * Creates a new ClimbBalanceMoveCommand.
+   * Creates a new ShooterConveyorCommand.
    */
-  public ClimbBalanceMoveCommand() {
-    climbBalanceSubsystem = ClimbBalanceSubsystem.getInstance();
+   public ShooterConveyorCommand(double power) {
+    shooterSubsystem = ShooterSubsystem.getInstance();
+    this.power = power;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(climbBalanceSubsystem);
+    addRequirements(shooterSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -34,15 +34,13 @@ public class ClimbBalanceMoveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (!(RobotContainer.OperatingJoystick.getAxisType(0) < 0.15 && RobotContainer.OperatingJoystick.getAxisType(0) > 0.15 )) {
-      climbBalanceSubsystem.setMotor(RobotContainer.OperatingJoystick.getRawAxis(0));
-    }
+    shooterSubsystem.setConveyorMotor(power);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    climbBalanceSubsystem.setMotor(0);
+    shooterSubsystem.setConveyorMotor(0);
   }
 
   // Returns true when the command should end.

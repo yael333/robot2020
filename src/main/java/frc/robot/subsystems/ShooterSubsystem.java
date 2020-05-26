@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
@@ -53,6 +54,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void setMotor(double power) {
     shooterSparkMax1.set(power);
+  }
+
+  public void setConveyorMotor(double power) {
+    shooterTalon.set(ControlMode.PercentOutput, power);
   }
 
   public double getEncoderVelocity() {

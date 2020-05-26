@@ -48,7 +48,7 @@ public class IntakeSubsystem extends SubsystemBase {
     return intakeDoubleSolenoid.get() == Value.kForward;
   }
 
-  public static IntakeSubsystem getInstanace() {
+  public static IntakeSubsystem getInstance() {
     if (intakeSubsystem == null) {
       intakeSubsystem = new IntakeSubsystem();
     }

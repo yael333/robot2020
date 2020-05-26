@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import com.revrobotics.ColorMatch;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -16,10 +18,20 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.commands.Chassis.MAPath;
 import frc.robot.commands.Chassis.PIDVision;
 import frc.robot.commands.Chassis.PIDVisionFeeder;
-
+import frc.robot.commands.conveyor.ConveyorMoveCommand;
+import frc.robot.commands.elevator.ElevatorDoubleSolenoidCommand;
+import frc.robot.commands.elevator.ElevatorMoveCommand;
+import frc.robot.commands.intake.IntakeDoubleSolenoid;
+import frc.robot.commands.intake.IntakeMoveCommand;
+import frc.robot.commands.roulette.RoulettePIDCommand;
+import frc.robot.commands.roulette.RouletteSolenoidCommand;
+import frc.robot.commands.shooter.ShooterConveyorCommand;
+import frc.robot.commands.shooter.ShooterPIDCommand;
 import frc.robot.subsystems.Automation;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Chassis;
+import frc.robot.triggers.LeftTrigger;
+import frc.robot.triggers.RightTrigger;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -50,7 +62,13 @@ public class RobotContainer {
   public static JoystickButton l1Button = new JoystickButton(OperatingJoystick, ControllerConstants.L1Button);
   public static JoystickButton r1Button = new JoystickButton(OperatingJoystick, ControllerConstants.R1Button);
 
-  public static JoystickButton lmButton = new JoystickButton(OperatingJoystick, ControllerConstants.LeftMiddleButton);
+  public static RightTrigger r2 = new RightTrigger();
+  public static LeftTrigger l2 = new LeftTrigger();
+
+  public static POVButton UpperPovButton = new POVButton(OperatingJoystick, 0);
+  public static POVButton LeftPOVButton = new POVButton(OperatingJoystick, 90);
+  public static POVButton DownPOVButton = new POVButton(OperatingJoystick, 180);
+  public static POVButton RightPOVButton = new POVButton(OperatingJoystick, 270);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -66,16 +84,24 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    aButton.whenPressed();
-    bButton.whileHeld();
+
     
-    xButton.whileHeld();
+    aButton.whileHeld(new IntakeMoveCommand(0.5));
+    bButton.whileHeld(new IntakeMoveCommand(-0.5));
+    
+    xButton.whileHeld(new ConveyorMoveCommand(0.5));
+    yButton.whileHeld(new ConveyorMoveCommand(0.5));
 
-    l1Button.whileHeld();
-    r1Button.whileHeld();
+    l1Button.whileHeld(new ShooterConveyorCommand(0.5));
+    r1Button.whileHeld(new ShooterConveyorCommand(-0.5)); 
 
-    lmButton.whileHeld();
-    xButton.whileHeld();
+    r2.whileActiveOnce(new ShooterPIDCommand(0));
+    //l2.whileActiveOnce(new RoulettePIDCommand(null));
+
+    UpperPovButton.whenPressed(new IntakeDoubleSolenoid());
+    LeftPOVButton.whenPressed(new RouletteSolenoidCommand());
+    DownPOVButton.whenPressed(new ElevatorDoubleSolenoidCommand());
+    
   }
 
   /**

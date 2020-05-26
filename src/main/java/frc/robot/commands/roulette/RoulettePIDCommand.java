@@ -43,6 +43,7 @@ public class RoulettePIDCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    double power = 0.5; //setpoint
     rouletteSubsystem.setMotor(rouletteSubsystem.getPID(setpoint));
   }
 

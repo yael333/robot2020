@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import frc.robot.Constants.ConveyorConstants;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -18,17 +19,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ConveyorSubsystem extends SubsystemBase {
 
   private static ConveyorSubsystem conveyorSubsystem;
-  private VictorSPX conveyorVictor;
+  private TalonSRX conveyorTalon;
 
   /**
    * Creates a new ConveyorSubsystem.
    */
   private ConveyorSubsystem() {
-    conveyorVictor = new VictorSPX(ConveyorConstants.VictorID);
+    conveyorTalon = new TalonSRX(ConveyorConstants.TalonID);
   }
 
   public void setMotor(double power) {
-    conveyorVictor.set(ControlMode.PercentOutput, power);
+    conveyorTalon.set(ControlMode.PercentOutput, power);
   }
 
   public static ConveyorSubsystem getInstance() {
@@ -39,7 +40,7 @@ public class ConveyorSubsystem extends SubsystemBase {
   }
 
   public void printDashBoard() {
-    SmartDashboard.putNumber("Conveyor Victor voltage:", conveyorVictor.getBusVoltage());
+    SmartDashboard.putNumber("Conveyor Victor voltage:", conveyorTalon.getBusVoltage());
   }
 
   @Override

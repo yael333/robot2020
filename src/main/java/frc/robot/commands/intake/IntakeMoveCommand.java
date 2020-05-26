@@ -19,7 +19,7 @@ public class IntakeMoveCommand extends CommandBase {
    * Creates a new IntakeMoveCommand.
    */
   public IntakeMoveCommand(double power) {
-    intakeSubsystem = IntakeSubsystem.getInstanace();
+    intakeSubsystem = IntakeSubsystem.getInstance();
     this.power = power;
 
     // Use addRequirements() here to declare subsystem dependencies.

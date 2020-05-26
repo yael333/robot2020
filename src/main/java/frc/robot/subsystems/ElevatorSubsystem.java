@@ -31,7 +31,7 @@ public class ElevatorSubsystem extends SubsystemBase {
    */
   private ElevatorSubsystem() {
     elevatorSMX = new CANSparkMax(ElevatorConstants.SparkMaxID, MotorType.kBrushless);
-    SMXEncoder = elevatorSMX.getEncoder();
+    SMXEncoder = elevatorSMX.getAlternateEncoder();
 
     SMXEncoder.setPositionConversionFactor(RobotConstants.tiksPerPulse);
     SMXEncoder.setVelocityConversionFactor(RobotConstants.tiksPerPulse);

@@ -11,5 +11,5 @@ package frc.robot.Constants;
  * why
  */
 public final class ConveyorConstants {
-    public static final int VictorID = 11;
+    public static final int TalonID = 11;
 }
