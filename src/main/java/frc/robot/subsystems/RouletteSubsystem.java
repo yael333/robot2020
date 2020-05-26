@@ -86,7 +86,7 @@ public class RouletteSubsystem extends SubsystemBase {
     int currentColorIndex = Arrays.binarySearch(rouletteColors, closestColor);
     int wantedColorIndex = Arrays.binarySearch(rouletteColors, wantedColor);
     int positive_way = currentColorIndex + wantedColorIndex;
-    int negative_way = currentColorIndex - (4 - wantedColorIndex);
+    int negative_way = currentColorIndex - (rouletteColors.length - wantedColorIndex);
 
     return Math.abs(positive_way) > Math.abs(negative_way) ? positive_way : negative_way;
   }

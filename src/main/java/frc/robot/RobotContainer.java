@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
-
+import frc.robot.Constants.ControllerConstants;
 import frc.robot.commands.Chassis.MAPath;
 import frc.robot.commands.Chassis.PIDVision;
 import frc.robot.commands.Chassis.PIDVisionFeeder;
@@ -43,6 +43,15 @@ public class RobotContainer {
   public static Joystick leftJoystick = new Joystick(0);
   public static Joystick rightJoystick = new Joystick(1);
 
+  public static JoystickButton aButton = new JoystickButton(OperatingJoystick, ControllerConstants.AButton);
+  public static JoystickButton bButton = new JoystickButton(OperatingJoystick, ControllerConstants.BButton);
+  public static JoystickButton xButton = new JoystickButton(OperatingJoystick, ControllerConstants.Xbutton);
+  public static JoystickButton yButton = new JoystickButton(OperatingJoystick, ControllerConstants.YButton);
+  public static JoystickButton l1Button = new JoystickButton(OperatingJoystick, ControllerConstants.L1Button);
+  public static JoystickButton r1Button = new JoystickButton(OperatingJoystick, ControllerConstants.R1Button);
+
+  public static JoystickButton lmButton = new JoystickButton(OperatingJoystick, ControllerConstants.LeftMiddleButton);
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -57,7 +66,16 @@ public class RobotContainer {
    * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    aButton.whenPressed();
+    bButton.whileHeld();
+    
+    xButton.whileHeld();
 
+    l1Button.whileHeld();
+    r1Button.whileHeld();
+
+    lmButton.whileHeld();
+    xButton.whileHeld();
   }
 
   /**
