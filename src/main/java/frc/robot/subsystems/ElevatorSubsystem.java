@@ -48,7 +48,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     return SMXEncoder.getPosition();
   }
 
-  public void setDoubleSolenoid(boolean state) {
+  public void setSolenoid(boolean state) {
     elevatorSolenoid.set(state);
   }
 

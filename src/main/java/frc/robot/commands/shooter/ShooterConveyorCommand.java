@@ -14,6 +14,7 @@ public class ShooterConveyorCommand extends CommandBase {
 
   ShooterSubsystem shooterSubsystem;
   double power;
+  boolean isIRExitCondition; // thought of doing an enum but eh too mucb work
 
   /**
    * Creates a new ShooterConveyorCommand.

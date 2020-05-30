@@ -89,7 +89,7 @@ public class RouletteSubsystem extends SubsystemBase {
     int positive_way = currentColorIndex + wantedColorIndex;
     int negative_way = currentColorIndex - (rouletteColors.length - wantedColorIndex);
 
-    return Math.abs(positive_way) > Math.abs(negative_way) ? positive_way : negative_way;
+    return Math.abs(positive_way) > Math.abs(negative_way) ? negative_way : positive_way;
   }
 
   public void setSolenoid(boolean state) {

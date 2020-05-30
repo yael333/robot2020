@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.util.Color;
  */
 public final class RouletteConstants {
   public static final int VictorID = 10;
-  public static final int SolenoidID = 4;
+  public static final int SolenoidID = 6;
 
   //colors (need chage real values)
   public static final Color Red = ColorMatch.makeColor(1, 0, 0);

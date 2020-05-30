@@ -15,9 +15,12 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.Chassis.MAPath;
 import frc.robot.commands.Chassis.PIDVision;
 import frc.robot.commands.Chassis.PIDVisionFeeder;
+import frc.robot.commands.automation.AutomationPrepareShootCommandGroup;
+import frc.robot.commands.automation.AutomationShootCommandGroup;
 import frc.robot.commands.conveyor.ConveyorMoveCommand;
 import frc.robot.commands.elevator.ElevatorDoubleSolenoidCommand;
 import frc.robot.commands.elevator.ElevatorMoveCommand;
@@ -30,10 +33,12 @@ import frc.robot.commands.shooter.ShooterPIDCommand;
 import frc.robot.subsystems.Automation;
 import frc.robot.subsystems.Autonomous;
 import frc.robot.subsystems.Chassis;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.triggers.LeftTrigger;
 import frc.robot.triggers.RightTrigger;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 
@@ -101,7 +106,9 @@ public class RobotContainer {
     UpperPovButton.whenPressed(new IntakeDoubleSolenoid());
     LeftPOVButton.whenPressed(new RouletteSolenoidCommand());
     DownPOVButton.whenPressed(new ElevatorDoubleSolenoidCommand());
-    
+
+    new ConditionalCommand(new AutomationShootCommandGroup(), new AutomationPrepareShootCommandGroup(), 
+    () -> ShooterSubsystem.getInstance().getIR() && ShooterSubsystem.getInstance().getEncoderVelocity() == ShooterConstants.velocitySetpoint);
   }
 
   /**

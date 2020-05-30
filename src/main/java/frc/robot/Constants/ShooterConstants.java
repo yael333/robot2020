@@ -20,4 +20,6 @@ public final class ShooterConstants {
     public static final double Ki = 1;
     public static final double Kd = 1;
     public static final double PIDWaitTime = 5;
+
+    public static final double velocitySetpoint = 10;
 }
