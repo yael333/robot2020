@@ -8,11 +8,11 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.ShooterConveyorSubsystem;
 
 public class ShooterConveyorCommand extends CommandBase {
 
-  ShooterSubsystem shooterSubsystem;
+  ShooterConveyorSubsystem shooterConveyorSubsystem;
   double power;
   boolean isIRExitCondition; // thought of doing an enum but eh too mucb work
 
@@ -20,11 +20,11 @@ public class ShooterConveyorCommand extends CommandBase {
    * Creates a new ShooterConveyorCommand.
    */
    public ShooterConveyorCommand(double power) {
-    shooterSubsystem = ShooterSubsystem.getInstance();
+    shooterConveyorSubsystem = ShooterConveyorSubsystem.getInstance();
     this.power = power;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooterSubsystem);
+    addRequirements(shooterConveyorSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -35,13 +35,13 @@ public class ShooterConveyorCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooterSubsystem.setConveyorMotor(power);
+    shooterConveyorSubsystem.setMotor(power);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooterSubsystem.setConveyorMotor(0);
+    shooterConveyorSubsystem.setMotor(0);
   }
 
   // Returns true when the command should end.

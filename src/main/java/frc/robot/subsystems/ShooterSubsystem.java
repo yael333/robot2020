@@ -26,7 +26,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private CANSparkMax shooterSparkMax1;
   private CANSparkMax shooterSparkMax2;
-  private TalonSRX shooterTalon;
 
   private CANEncoder sparkMaxEncoder;
   private DigitalInput shooterIR;
@@ -39,7 +38,6 @@ public class ShooterSubsystem extends SubsystemBase {
   private ShooterSubsystem() {
     shooterSparkMax1 = new CANSparkMax(ShooterConstants.SparkMaxID1, MotorType.kBrushless);
     shooterSparkMax2 = new CANSparkMax(ShooterConstants.SparkMaxID2, MotorType.kBrushless);
-    shooterTalon = new TalonSRX(ShooterConstants.TalonID);
 
     shooterSparkMax2.follow(shooterSparkMax1);
 
@@ -54,10 +52,6 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void setMotor(double power) {
     shooterSparkMax1.set(power);
-  }
-
-  public void setConveyorMotor(double power) {
-    shooterTalon.set(ControlMode.PercentOutput, power);
   }
 
   public double getEncoderVelocity() {

@@ -107,8 +107,10 @@ public class RobotContainer {
     LeftPOVButton.whenPressed(new RouletteSolenoidCommand());
     DownPOVButton.whenPressed(new ElevatorDoubleSolenoidCommand());
 
+    /* I think this needs to be a default command but not sure, also the equal sign in the velocity thing might be wrong too
     new ConditionalCommand(new AutomationShootCommandGroup(), new AutomationPrepareShootCommandGroup(), 
     () -> ShooterSubsystem.getInstance().getIR() && ShooterSubsystem.getInstance().getEncoderVelocity() == ShooterConstants.velocitySetpoint);
+    */
   }
 
   /**
