@@ -34,6 +34,17 @@ public class ElevatorMoveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (elevatorSubsystem.getSolenoid() && RobotContainer.OperatingJoystick.getRawAxis(1) > 0.5 
+      && elevatorSubsystem.getEncoder() < ElevatorConstants.MaxHeight) {
+        elevatorSubsystem.setMotor(-0.5);
+    }
+    else if (RobotContainer.OperatingJoystick.getRawAxis(1) > -0.5 && elevatorSubsystem.getEncoder() > ElevatorConstants.MinHeight) {
+      elevatorSubsystem.setMotor(0.5);
+    }
+    else {
+      elevatorSubsystem.setMotor(0);
+    }
+    
     /*
     if ( (RobotContainer.OperatingJoystick.getAxisType(1) > 0.5 || RobotContainer.OperatingJoystick.getAxisType(1) < -0.5) && 
          elevatorSubsystem.getEncoder() <= ElevatorConstants.MaxHeight && elevatorSubsystem.getEncoder() >= ElevatorConstants.MinHeight) {
