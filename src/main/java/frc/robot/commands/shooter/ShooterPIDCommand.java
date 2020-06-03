@@ -40,7 +40,7 @@ public class ShooterPIDCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double power =  0.5; //shooterSubsystem.getPID(setpoint)
+    double power =  -0.5; //shooterSubsystem.getPID(setpoint)
     shooterSubsystem.setMotor(power);
   }
 
@@ -53,9 +53,12 @@ public class ShooterPIDCommand extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    /*
     if (shooterSubsystem.atSetpoint()) {
       lastTimeOnTarget = Timer.getFPGATimestamp();
     } 
     return shooterSubsystem.atSetpoint() && Timer.getFPGATimestamp() - lastTimeOnTarget > waitTime;
+    */
+    return false;
   }
 }

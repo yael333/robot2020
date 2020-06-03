@@ -16,6 +16,6 @@ import frc.robot.RobotContainer;
 public class RightTrigger extends Trigger {
   @Override
   public boolean get() {
-    return RobotContainer.OperatingJoystick.getAxisType(3) > 0.5;
+    return RobotContainer.OperatingJoystick.getRawAxis(3) > 0.5;
   }
 }

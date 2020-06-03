@@ -45,7 +45,7 @@ public class RoulettePIDCommand extends CommandBase {
   @Override
   public void execute() {
     double power = 0.5; //setpoint
-    rouletteSubsystem.setMotor(rouletteSubsystem.getPID(setpoint));
+    rouletteSubsystem.setMotor(power);
   }
 
   // Called once the command ends or is interrupted.

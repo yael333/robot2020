@@ -7,6 +7,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANEncoder;
@@ -70,7 +72,7 @@ public class ShooterSubsystem extends SubsystemBase {
     return shooterPID.atSetpoint();
   }
 
-  public boolean getIR() {
+  public Boolean getIR() {
     return shooterIR.get();
   }
 

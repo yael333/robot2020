@@ -100,12 +100,12 @@ public class RobotContainer {
     l1Button.whileHeld(new ShooterConveyorCommand(0.5));
     r1Button.whileHeld(new ShooterConveyorCommand(-0.5)); 
 
-    r2.whileActiveOnce(new ShooterPIDCommand(0));
+    r2.whileActiveContinuous(new ShooterPIDCommand(0));
     //l2.whileActiveOnce(new RoulettePIDCommand(null));
 
-    UpperPovButton.whenPressed(new IntakeDoubleSolenoid());
-    LeftPOVButton.whenPressed(new RouletteSolenoidCommand());
-    DownPOVButton.whenPressed(new ElevatorDoubleSolenoidCommand());
+    UpperPovButton.whenActive(new IntakeDoubleSolenoid());
+    LeftPOVButton.whenActive(new RouletteSolenoidCommand());
+    DownPOVButton.whenActive(new ElevatorDoubleSolenoidCommand());
 
     /* I think this needs to be a default command but not sure, also the equal sign in the velocity thing might be wrong too
     new ConditionalCommand(new AutomationShootCommandGroup(), new AutomationPrepareShootCommandGroup(), 
