@@ -13,6 +13,7 @@ import frc.robot.commands.intake.IntakeDoubleSolenoid;
 import frc.robot.commands.intake.IntakeMoveCommand;
 import frc.robot.commands.shooter.ShooterConveyorCommand;
 import frc.robot.subsystems.Automation;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
 public class AutomationCollectionCommand extends CommandBase {
@@ -38,7 +39,9 @@ public class AutomationCollectionCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    intakeSolenoidCommand.initialize();;
+    if (!IntakeSubsystem.getInstance().getDoubleSolenoid()){
+      intakeSolenoidCommand.initialize();
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -60,6 +63,7 @@ public class AutomationCollectionCommand extends CommandBase {
   public void end(boolean interrupted) {
   conveyorMoveCommand.end(true);
   intakeMoveCommand.end(true);
+  intakeSolenoidCommand.initialize();
   }
 
   // Returns true when the command should end.
