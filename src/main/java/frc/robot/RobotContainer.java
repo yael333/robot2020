@@ -19,8 +19,6 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.Chassis.MAPath;
 import frc.robot.commands.Chassis.PIDVision;
 import frc.robot.commands.Chassis.PIDVisionFeeder;
-import frc.robot.commands.automation.AutomationPrepareShootCommandGroup;
-import frc.robot.commands.automation.AutomationShootCommandGroup;
 import frc.robot.commands.conveyor.ConveyorMoveCommand;
 import frc.robot.commands.elevator.ElevatorDoubleSolenoidCommand;
 import frc.robot.commands.elevator.ElevatorMoveCommand;
