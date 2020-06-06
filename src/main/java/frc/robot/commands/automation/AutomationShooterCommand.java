@@ -5,61 +5,65 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.shooter;
+package frc.robot.commands.automation;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.ShooterConstants;
+import frc.robot.commands.conveyor.ConveyorMoveCommand;
+import frc.robot.commands.shooter.ShooterConveyorCommand;
+import frc.robot.commands.shooter.ShooterPIDCommand;
+import frc.robot.subsystems.Automation;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class ShooterPIDCommand extends CommandBase {
+public class AutomationShooterCommand extends CommandBase {
 
+  Automation automationSubsystem;
   ShooterSubsystem shooterSubsystem;
-  double setpoint;
-  
-  double lastTimeOnTarget;
-  double waitTime;
+  CommandBase shooterPID, shooterConveyorCommand, conveyorMoveCommand;
 
   /**
-   * Creates a new ShooterPIDCommand.
+   * Creates a new AutomationShooterCommand.
    */
-  public ShooterPIDCommand(double setpoint) {
+  public AutomationShooterCommand() {
+    automationSubsystem = Automation.getinstance();
     shooterSubsystem = ShooterSubsystem.getInstance();
-    this.setpoint = setpoint;
-    waitTime = ShooterConstants.PIDWaitTime;
+
+    shooterPID = new ShooterPIDCommand(2000);
+    shooterConveyorCommand = new ShooterConveyorCommand(.5);
+    conveyorMoveCommand = new ConveyorMoveCommand(.5);
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooterSubsystem);
+    addRequirements(automationSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooterSubsystem.setPIDSetpoint(this.setpoint);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double power = shooterSubsystem.getPID();
-    shooterSubsystem.setMotor(power);
+    if (shooterSubsystem.getIR() && shooterSubsystem.atSetpoint()) {
+      shooterConveyorCommand.execute();
+      conveyorMoveCommand.execute();
+    }
+    else {
+     conveyorMoveCommand.execute();
+     shooterPID.execute(); 
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    shooterSubsystem.setMotor(0);
+    conveyorMoveCommand.end(true);
+    shooterConveyorCommand.end(true);
+    shooterPID.end(true);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    /*
-    if (shooterSubsystem.atSetpoint()) {
-      lastTimeOnTarget = Timer.getFPGATimestamp();
-    } 
-    return shooterSubsystem.atSetpoint() && Timer.getFPGATimestamp() - lastTimeOnTarget > waitTime;
-    */
     return false;
   }
 }

@@ -7,30 +7,64 @@
 
 package frc.robot.commands.automation;
 
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.commands.conveyor.ConveyorMoveCommand;
 import frc.robot.commands.intake.IntakeDoubleSolenoid;
 import frc.robot.commands.intake.IntakeMoveCommand;
 import frc.robot.commands.shooter.ShooterConveyorCommand;
+import frc.robot.subsystems.Automation;
 import frc.robot.subsystems.ShooterSubsystem;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class AutomationCollectionCommand extends ParallelDeadlineGroup {
+public class AutomationCollectionCommand extends CommandBase {
+
+  private Automation automationSubsystem;
+  private CommandBase intakeSolenoidCommand, intakeMoveCommand, conveyorMoveCommand, shooterConveyorCommand;
+
   /**
    * Creates a new AutomationCollectionCommand.
    */
   public AutomationCollectionCommand() {
-    // Add your commands in the super() call.  Add the deadline first.
-    super( new WaitUntilCommand(ShooterSubsystem.getInstance()::getIR),
-      new SequentialCommandGroup(
-        new IntakeDoubleSolenoid(), 
-        new IntakeMoveCommand(0.5)), 
-      new ConveyorMoveCommand(0.5), 
-      new ShooterConveyorCommand(0.5)
-    );
+    automationSubsystem = Automation.getinstance();
+
+    intakeSolenoidCommand = new IntakeDoubleSolenoid();
+    intakeMoveCommand = new IntakeMoveCommand(.5);
+    conveyorMoveCommand = new ConveyorMoveCommand(.5);
+    shooterConveyorCommand = new ShooterConveyorCommand(.5);
+
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(automationSubsystem);
+  }
+
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
+    intakeSolenoidCommand.initialize();;
+  }
+
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    intakeMoveCommand.execute();
+    conveyorMoveCommand.execute();
+    
+    if (ShooterSubsystem.getInstance().getIR()) {
+      shooterConveyorCommand.end(true);
+    }
+    else {
+      shooterConveyorCommand.execute();
+    }
+  }
+
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+  conveyorMoveCommand.end(true);
+  intakeMoveCommand.end(true);
+  }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return false;
   }
 }

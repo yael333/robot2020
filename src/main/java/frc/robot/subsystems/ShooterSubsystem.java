@@ -64,8 +64,13 @@ public class ShooterSubsystem extends SubsystemBase {
     return sparkMaxEncoder.getPosition();
   }
 
-  public double getPID(double setpoint) {
-    return MathUtil.clamp(shooterPID.calculate(getEncoderVelocity(), setpoint), -1, 1);
+  public void setPIDSetpoint(double setpoint) {
+    shooterPID.setSetpoint(setpoint);
+  }
+
+  public double getPID() {
+    double SHOOTERKP = (12.0/5600.0) * shooterPID.getSetpoint();
+    return MathUtil.clamp(shooterPID.calculate(getEncoderVelocity() + SHOOTERKP), 0, 12);
   }
 
   public boolean atSetpoint() {
