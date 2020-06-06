@@ -48,6 +48,7 @@ public class AutomationShooterCommand extends CommandBase {
       conveyorMoveCommand.execute();
     }
     else {
+      shooterConveyorCommand.end(true);
      conveyorMoveCommand.execute();
      shooterPID.execute(); 
     }
