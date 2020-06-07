@@ -17,6 +17,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants.RobotConstants;
@@ -50,10 +51,11 @@ public class ShooterSubsystem extends SubsystemBase {
     sparkMaxEncoder.setVelocityConversionFactor(RobotConstants.tiksPerPulse);
 
     shooterPID = new PIDController(ShooterConstants.Kp, ShooterConstants.Ki, ShooterConstants.Kd);
+    shooterPID.setTolerance(70);
   }
 
   public void setMotor(double power) {
-    shooterSparkMax1.set(power);
+    shooterSparkMax1.setVoltage(power);
   }
 
   public double getEncoderVelocity() {
@@ -69,8 +71,12 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public double getPID() {
-    double SHOOTERKP = (12.0/5600.0) * shooterPID.getSetpoint();
-    return MathUtil.clamp(shooterPID.calculate(getEncoderVelocity() + SHOOTERKP), 0, 12);
+    double SHOOTERKF = (12.0/5700.0) * shooterPID.getSetpoint();
+    return MathUtil.clamp(shooterPID.calculate(getEncoderVelocity()) + SHOOTERKF, 0, 12);
+  }
+
+  public void resetPID() {
+    shooterPID.reset();
   }
 
   public boolean atSetpoint() {
@@ -88,8 +94,17 @@ public class ShooterSubsystem extends SubsystemBase {
     return shooterSubsystem;
   }
 
+  public void DashboardPrint() {
+    SmartDashboard.putBoolean("PID at setpoint:", atSetpoint());
+    SmartDashboard.putNumber("shooter RPM:", getEncoderVelocity());
+    SmartDashboard.putBoolean("shooter IR:", getIR());
+    SmartDashboard.putNumber("PID setpoint:", shooterPID.getSetpoint());
+  }
+
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    // This method will be called once per scheduler run'
+
+    DashboardPrint();
   }
 }

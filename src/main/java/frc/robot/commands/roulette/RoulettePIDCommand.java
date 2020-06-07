@@ -25,12 +25,13 @@ public class RoulettePIDCommand extends CommandBase {
    * Creates a new RoulettePIDCommand.
    */
   public RoulettePIDCommand(Color wantedColor) {
+    /*
     rouletteSubsystem = RouletteSubsystem.getInstance();
     int OptimalWay = rouletteSubsystem.getOptimalWay(wantedColor);
     this.setpoint = rouletteSubsystem.getColorEncoder() + OptimalWay;
     this.waitTime = RouletteConstants.PIDWaitTime;
     rouletteSubsystem.setReversed(OptimalWay < 0);
-
+    */
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(rouletteSubsystem);
   }

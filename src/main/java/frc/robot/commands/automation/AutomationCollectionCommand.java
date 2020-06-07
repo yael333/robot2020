@@ -28,9 +28,9 @@ public class AutomationCollectionCommand extends CommandBase {
     automationSubsystem = Automation.getinstance();
 
     intakeSolenoidCommand = new IntakeDoubleSolenoid();
-    intakeMoveCommand = new IntakeMoveCommand(.5);
-    conveyorMoveCommand = new ConveyorMoveCommand(.5);
-    shooterConveyorCommand = new ShooterConveyorCommand(.5);
+    intakeMoveCommand = new IntakeMoveCommand(-.5);
+    conveyorMoveCommand = new ConveyorMoveCommand(-.5);
+    shooterConveyorCommand = new ShooterConveyorCommand(-.5);
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(automationSubsystem);
@@ -48,22 +48,12 @@ public class AutomationCollectionCommand extends CommandBase {
   @Override
   public void execute() {
     intakeMoveCommand.execute();
-    conveyorMoveCommand.execute();
-    
-    if (ShooterSubsystem.getInstance().getIR()) {
-      shooterConveyorCommand.end(true);
-    }
-    else {
-      shooterConveyorCommand.execute();
-    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-  conveyorMoveCommand.end(true);
   intakeMoveCommand.end(true);
-  intakeSolenoidCommand.initialize();
   }
 
   // Returns true when the command should end.

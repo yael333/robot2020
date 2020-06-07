@@ -12,6 +12,7 @@ import frc.robot.Constants.ElevatorConstants;
 
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Solenoid;
@@ -36,6 +37,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     SMXEncoder.setPositionConversionFactor(RobotConstants.tiksPerPulse);
     SMXEncoder.setVelocityConversionFactor(RobotConstants.tiksPerPulse);
     SMXEncoder.setPosition(0);
+
+    elevatorSMX.setIdleMode(IdleMode.kBrake);
 
     elevatorSolenoid = new Solenoid(ElevatorConstants.SolenoidChannel);
   }

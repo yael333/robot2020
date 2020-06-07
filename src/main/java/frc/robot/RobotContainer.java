@@ -19,6 +19,7 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.Chassis.MAPath;
 import frc.robot.commands.Chassis.PIDVision;
 import frc.robot.commands.Chassis.PIDVisionFeeder;
+import frc.robot.commands.automation.AutomationCollectionCommand;
 import frc.robot.commands.automation.AutomationShooterCommand;
 import frc.robot.commands.conveyor.ConveyorMoveCommand;
 import frc.robot.commands.elevator.ElevatorDoubleSolenoidCommand;
@@ -99,13 +100,13 @@ public class RobotContainer {
     l1Button.whileHeld(new ShooterConveyorCommand(0.5));
     r1Button.whileHeld(new ShooterConveyorCommand(-0.5)); 
 
-    r2.whileActiveContinuous(new ShooterPIDCommand(0));
-    //l2.whileActiveOnce(new RoulettePIDCommand(null));
+    r2.whileActiveContinuous(new ShooterPIDCommand(2000));
+    l2.whileActiveOnce(new AutomationShooterCommand());
 
     UpperPovButton.whenActive(new IntakeDoubleSolenoid());
     LeftPOVButton.whenActive(new RouletteSolenoidCommand());
     RightPOVButton.whenActive(new ElevatorDoubleSolenoidCommand());
-    DownPOVButton.whenActive(new AutomationShooterCommand());
+    DownPOVButton.whileActiveContinuous(new AutomationCollectionCommand());
     
     /* I think this needs to be a default command but not sure, also the equal sign in the velocity thing might be wrong too
     new ConditionalCommand(new AutomationShootCommandGroup(), new AutomationPrepareShootCommandGroup(), 

@@ -26,7 +26,7 @@ public class ShooterPIDCommand extends CommandBase {
   public ShooterPIDCommand(double setpoint) {
     shooterSubsystem = ShooterSubsystem.getInstance();
     this.setpoint = setpoint;
-    waitTime = ShooterConstants.PIDWaitTime;
+    //waitTime = ShooterConstants.PIDWaitTime;
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooterSubsystem);
@@ -35,6 +35,7 @@ public class ShooterPIDCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    shooterSubsystem.resetPID();
     shooterSubsystem.setPIDSetpoint(this.setpoint);
   }
 

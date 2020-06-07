@@ -15,6 +15,6 @@ public final class ElevatorConstants {
     public static final int SolenoidChannel = 4;
 
     //placeholders
-    public static final double MaxHeight = 1000;
-    public static final double MinHeight = -1000;
+    public static final double MaxHeight = -140000;
+    public static final double MinHeight = -6000;
 }

@@ -27,9 +27,9 @@ public class AutomationShooterCommand extends CommandBase {
     automationSubsystem = Automation.getinstance();
     shooterSubsystem = ShooterSubsystem.getInstance();
 
-    shooterPID = new ShooterPIDCommand(2000);
-    shooterConveyorCommand = new ShooterConveyorCommand(.5);
-    conveyorMoveCommand = new ConveyorMoveCommand(.5);
+    shooterPID = new ShooterPIDCommand(2800);
+    shooterConveyorCommand = new ShooterConveyorCommand(-0.95);
+    conveyorMoveCommand = new ConveyorMoveCommand(-.5);
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(automationSubsystem);
@@ -38,19 +38,20 @@ public class AutomationShooterCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    shooterPID.initialize();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (shooterSubsystem.getIR() && shooterSubsystem.atSetpoint()) {
+    shooterPID.execute();
+    if (shooterSubsystem.atSetpoint()) {
       shooterConveyorCommand.execute();
       conveyorMoveCommand.execute();
     }
     else {
       shooterConveyorCommand.end(true);
-     conveyorMoveCommand.execute();
-     shooterPID.execute(); 
+      conveyorMoveCommand.end(true);
     }
   }
 

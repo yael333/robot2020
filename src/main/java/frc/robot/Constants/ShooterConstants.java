@@ -16,9 +16,9 @@ public final class ShooterConstants {
     public static final int TalonID = 7;
     public static final int IRID = 2;
 
-    public static final double Kp = 1;
-    public static final double Ki = 1;
-    public static final double Kd = 1;
+    public static final double Kp = 0.0006;
+    public static final double Ki = 0.0002;
+    public static final double Kd = 0;
     public static final double PIDWaitTime = 5;
 
     public static final double velocitySetpoint = 10;

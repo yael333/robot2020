@@ -32,6 +32,10 @@ public class ConveyorSubsystem extends SubsystemBase {
     conveyorTalon.set(ControlMode.PercentOutput, power);
   }
 
+  public double getCurrent() {
+    return conveyorTalon.getStatorCurrent();
+  }
+
   public static ConveyorSubsystem getInstance() {
     if (conveyorSubsystem == null) {
       conveyorSubsystem = new ConveyorSubsystem();
@@ -40,7 +44,7 @@ public class ConveyorSubsystem extends SubsystemBase {
   }
 
   public void printDashBoard() {
-    SmartDashboard.putNumber("Conveyor Victor voltage:", conveyorTalon.getBusVoltage());
+    SmartDashboard.putNumber("Conveyor current:", conveyorTalon.getStatorCurrent());
   }
 
   @Override

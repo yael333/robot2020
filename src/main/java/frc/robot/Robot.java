@@ -130,7 +130,7 @@ public class Robot extends TimedRobot {
     Chassis.getinstance().resetValue();
     Chassis.getinstance().rampRate(0);
 
-    // CommandScheduler.getInstance().setDefaultCommand(ElevatorSubsystem.getInstance(), new ElevatorMoveCommand());
+    CommandScheduler.getInstance().setDefaultCommand(ElevatorSubsystem.getInstance(), new ElevatorMoveCommand());
     //CommandScheduler.getInstance().setDefaultCommand(ClimbBalanceSubsystem.getInstance() , new ClimbBalanceMoveCommand());
   }
 

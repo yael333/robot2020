@@ -12,7 +12,6 @@ import frc.robot.Constants.RouletteConstants;
 import java.util.Arrays;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
@@ -42,6 +41,8 @@ public class RouletteSubsystem extends SubsystemBase {
   
   private boolean isReversed;
   private int colorEncoder = 0;
+
+  private String colorString;
 
   /**
    * Creates a new RouletteSubsystem.
@@ -82,7 +83,7 @@ public class RouletteSubsystem extends SubsystemBase {
   public void setReversed(boolean state) {
     isReversed = state;
   }
-
+  /*
   public int getOptimalWay(Color wantedColor) {
     int currentColorIndex = Arrays.binarySearch(rouletteColors, closestColor);
     int wantedColorIndex = Arrays.binarySearch(rouletteColors, wantedColor);
@@ -91,6 +92,7 @@ public class RouletteSubsystem extends SubsystemBase {
 
     return Math.abs(positive_way) > Math.abs(negative_way) ? negative_way : positive_way;
   }
+  */
 
   public void setSolenoid(boolean state) {
     roulettSolenoid.set(state);
@@ -103,14 +105,18 @@ public class RouletteSubsystem extends SubsystemBase {
   public static RouletteSubsystem getInstance() {
     if (rouletteSubsystem == null) {
       rouletteSubsystem = new RouletteSubsystem();
-    }
+      }
     return rouletteSubsystem;
   }
 
   public void printDashBoard() {
     SmartDashboard.putNumber("Roulette talon voltage:", rouletteVictor.getBusVoltage());
     SmartDashboard.putBoolean("Roulette solenoid state:", roulettSolenoid.get());
-    SmartDashboard.putString("Roulette Color:", closestColor.color.toString());
+    
+    SmartDashboard.putNumber("Roulette Red:", closestColor.color.red);
+    SmartDashboard.putNumber("Roulette Green:", closestColor.color.green);
+    SmartDashboard.putNumber("Roulette Blue:", closestColor.color.blue);
+    SmartDashboard.putString("Roulette Color", colorString);
   }
 
   @Override
@@ -126,6 +132,14 @@ public class RouletteSubsystem extends SubsystemBase {
         }
       }
     lastColor = closestColor.color;
+
+
+    if (closestColor.color == RouletteConstants.Red) {
+      colorString = "Red";
+    }
+    else if (closestColor.color == RouletteConstants.Yellow) {
+      colorString = "Yellow";
+    }
 
     printDashBoard();
   }

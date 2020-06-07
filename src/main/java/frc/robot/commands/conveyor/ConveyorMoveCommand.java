@@ -7,13 +7,17 @@
 
 package frc.robot.commands.conveyor;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ConveyorSubsystem;
+import frc.robot.subsystems.ShooterConveyorSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 public class ConveyorMoveCommand extends CommandBase {
 
   ConveyorSubsystem conveyorSubsystem;
   double power;
+  double lastTimeOnTarget;
 
   /**
    * Creates a new ConveyorMoveCommand.
@@ -34,7 +38,13 @@ public class ConveyorMoveCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    conveyorSubsystem.setMotor(power);
+    if ((conveyorSubsystem.getCurrent() < -13 || ShooterConveyorSubsystem.getInstance().getCurrent() < -37) && Timer.getFPGATimestamp() - lastTimeOnTarget > 0.1) {
+      conveyorSubsystem.setMotor(.8);
+      }
+   else {
+     conveyorSubsystem.setMotor(-.95);
+     lastTimeOnTarget = Timer.getFPGATimestamp();
+    }
   }
 
   // Called once the command ends or is interrupted.

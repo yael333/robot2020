@@ -7,6 +7,7 @@
 
 package frc.robot.commands.shooter;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ShooterConveyorSubsystem;
 
@@ -14,7 +15,7 @@ public class ShooterConveyorCommand extends CommandBase {
 
   ShooterConveyorSubsystem shooterConveyorSubsystem;
   double power;
-  boolean isIRExitCondition; // thought of doing an enum but eh too mucb work
+  double lastTimeOnTarget;
 
   /**
    * Creates a new ShooterConveyorCommand.
@@ -22,6 +23,7 @@ public class ShooterConveyorCommand extends CommandBase {
    public ShooterConveyorCommand(double power) {
     shooterConveyorSubsystem = ShooterConveyorSubsystem.getInstance();
     this.power = power;
+
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooterConveyorSubsystem);
@@ -35,9 +37,14 @@ public class ShooterConveyorCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooterConveyorSubsystem.setMotor(power);
+    if (shooterConveyorSubsystem.getCurrent() < -37 && Timer.getFPGATimestamp() - lastTimeOnTarget > 0.1) {
+      shooterConveyorSubsystem.setMotor(.8);
+      }
+   else {
+     shooterConveyorSubsystem.setMotor(-.95);
+     lastTimeOnTarget = Timer.getFPGATimestamp();
+    }
   }
-
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {

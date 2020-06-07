@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 
@@ -29,6 +30,10 @@ public class ShooterConveyorSubsystem extends SubsystemBase {
     shooterConveyorTalon.set(ControlMode.PercentOutput, power);
   }
 
+  public double getCurrent() {
+    return shooterConveyorTalon.getStatorCurrent();
+  }
+
   public static ShooterConveyorSubsystem getInstance() {
     if (shooterConveyorSubsystem == null) {
       shooterConveyorSubsystem = new ShooterConveyorSubsystem();
@@ -39,5 +44,6 @@ public class ShooterConveyorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("shooter conv current:", shooterConveyorTalon.getStatorCurrent());
   }
 }
