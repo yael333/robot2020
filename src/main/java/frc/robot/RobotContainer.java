@@ -19,6 +19,7 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.Chassis.MAPath;
 import frc.robot.commands.Chassis.PIDVision;
 import frc.robot.commands.Chassis.PIDVisionFeeder;
+import frc.robot.commands.automation.AutomationShooterCommand;
 import frc.robot.commands.conveyor.ConveyorMoveCommand;
 import frc.robot.commands.elevator.ElevatorDoubleSolenoidCommand;
 import frc.robot.commands.elevator.ElevatorMoveCommand;
@@ -69,9 +70,9 @@ public class RobotContainer {
   public static LeftTrigger l2 = new LeftTrigger();
 
   public static POVButton UpperPovButton = new POVButton(OperatingJoystick, 0);
-  public static POVButton LeftPOVButton = new POVButton(OperatingJoystick, 90);
+  public static POVButton LeftPOVButton = new POVButton(OperatingJoystick, 270);
   public static POVButton DownPOVButton = new POVButton(OperatingJoystick, 180);
-  public static POVButton RightPOVButton = new POVButton(OperatingJoystick, 270);
+  public static POVButton RightPOVButton = new POVButton(OperatingJoystick, 90);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -103,8 +104,9 @@ public class RobotContainer {
 
     UpperPovButton.whenActive(new IntakeDoubleSolenoid());
     LeftPOVButton.whenActive(new RouletteSolenoidCommand());
-    DownPOVButton.whenActive(new ElevatorDoubleSolenoidCommand());
-
+    RightPOVButton.whenActive(new ElevatorDoubleSolenoidCommand());
+    DownPOVButton.whenActive(new AutomationShooterCommand());
+    
     /* I think this needs to be a default command but not sure, also the equal sign in the velocity thing might be wrong too
     new ConditionalCommand(new AutomationShootCommandGroup(), new AutomationPrepareShootCommandGroup(), 
     () -> ShooterSubsystem.getInstance().getIR() && ShooterSubsystem.getInstance().getEncoderVelocity() == ShooterConstants.velocitySetpoint);
