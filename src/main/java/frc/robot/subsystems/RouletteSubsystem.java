@@ -42,8 +42,6 @@ public class RouletteSubsystem extends SubsystemBase {
   private boolean isReversed;
   private int colorEncoder = 0;
 
-  private String colorString;
-
   /**
    * Creates a new RouletteSubsystem.
    */
@@ -83,16 +81,26 @@ public class RouletteSubsystem extends SubsystemBase {
   public void setReversed(boolean state) {
     isReversed = state;
   }
-  /*
+
+  public int LinearSearch(Color[] Colors, Color wantedColor) {
+    for (int i=0; i < Colors.length; i++) {
+      if (Colors[i] == wantedColor) {
+        return i;
+      } 
+    }
+    return 0;
+  }
+
   public int getOptimalWay(Color wantedColor) {
-    int currentColorIndex = Arrays.binarySearch(rouletteColors, closestColor);
-    int wantedColorIndex = Arrays.binarySearch(rouletteColors, wantedColor);
+    
+    int currentColorIndex = LinearSearch(rouletteColors, closestColor.color);
+    int wantedColorIndex = LinearSearch(rouletteColors, wantedColor);
+  
     int positive_way = currentColorIndex + wantedColorIndex;
     int negative_way = currentColorIndex - (rouletteColors.length - wantedColorIndex);
 
     return Math.abs(positive_way) > Math.abs(negative_way) ? negative_way : positive_way;
   }
-  */
 
   public void setSolenoid(boolean state) {
     roulettSolenoid.set(state);
@@ -120,7 +128,6 @@ public class RouletteSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Roulette Closest Red:", closestColor.color.red);
     SmartDashboard.putNumber("Roulette Closest Green:", closestColor.color.green);
     SmartDashboard.putNumber("Roulette Closest Blue:", closestColor.color.blue);
-    SmartDashboard.putString("Roulette Closest Color", colorString);
   }
 
   @Override
@@ -136,14 +143,6 @@ public class RouletteSubsystem extends SubsystemBase {
         }
       }
     lastColor = closestColor.color;
-
-
-    if (closestColor.color == RouletteConstants.Red) {
-      colorString = "Red";
-    }
-    else if (closestColor.color == RouletteConstants.Yellow) {
-      colorString = "Yellow";
-    }
 
     printDashBoard();
   }
