@@ -10,15 +10,12 @@ package frc.robot;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 import frc.robot.commands.Chassis.MAPath;
 import frc.robot.commands.Chassis.tankDrive;
-import frc.robot.commands.balance.ClimbBalanceMoveCommand;
 import frc.robot.commands.elevator.ElevatorMoveCommand;
 import frc.robot.subsystems.Chassis;
 import frc.robot.subsystems.ClimbBalanceSubsystem;

@@ -14,7 +14,6 @@ import frc.robot.commands.intake.IntakeMoveCommand;
 import frc.robot.commands.shooter.ShooterConveyorCommand;
 import frc.robot.subsystems.Automation;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
 
 public class AutomationCollectionCommand extends CommandBase {
 

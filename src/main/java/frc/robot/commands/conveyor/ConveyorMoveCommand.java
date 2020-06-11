@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ConveyorSubsystem;
 import frc.robot.subsystems.ShooterConveyorSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
 
 public class ConveyorMoveCommand extends CommandBase {
 
