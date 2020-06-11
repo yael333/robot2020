@@ -112,11 +112,15 @@ public class RouletteSubsystem extends SubsystemBase {
   public void printDashBoard() {
     SmartDashboard.putNumber("Roulette talon voltage:", rouletteVictor.getBusVoltage());
     SmartDashboard.putBoolean("Roulette solenoid state:", roulettSolenoid.get());
+
+    SmartDashboard.putNumber("Sensor Red:", getColor().red);
+    SmartDashboard.putNumber("Sensor Green:", getColor().green);
+    SmartDashboard.putNumber("Sensor Blue:", getColor().blue);
     
-    SmartDashboard.putNumber("Roulette Red:", closestColor.color.red);
-    SmartDashboard.putNumber("Roulette Green:", closestColor.color.green);
-    SmartDashboard.putNumber("Roulette Blue:", closestColor.color.blue);
-    SmartDashboard.putString("Roulette Color", colorString);
+    SmartDashboard.putNumber("Roulette Closest Red:", closestColor.color.red);
+    SmartDashboard.putNumber("Roulette Closest Green:", closestColor.color.green);
+    SmartDashboard.putNumber("Roulette Closest Blue:", closestColor.color.blue);
+    SmartDashboard.putString("Roulette Closest Color", colorString);
   }
 
   @Override
