@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Robot;
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.commands.Chassis.MAPath;
 import frc.robot.commands.automation.AutomationCollectionCommand;
 import frc.robot.commands.automation.AutomationShooterCommand;
 import frc.robot.commands.conveyor.ConveyorMoveCommand;
@@ -83,7 +84,7 @@ public class RobotContainer {
     yButton.whileHeld(new ConveyorMoveCommand(0.5));
 
     l1Button.whileHeld(new ShooterConveyorCommand(0.5));
-    r1Button.whileHeld(new ShooterConveyorCommand(-0.5)); 
+    r1Button.whileHeld(new MAPath(0)); 
 
     r2.whileActiveContinuous(new ShooterPIDCommand(2000));
     l2.whileActiveOnce(new AutomationShooterCommand());
@@ -92,11 +93,7 @@ public class RobotContainer {
     LeftPOVButton.whenActive(new RouletteSolenoidCommand());
     RightPOVButton.whenActive(new ElevatorDoubleSolenoidCommand());
     DownPOVButton.whileActiveContinuous(new AutomationCollectionCommand());
-    
-    /* I think this needs to be a default command but not sure, also the equal sign in the velocity thing might be wrong too
-    new ConditionalCommand(new AutomationShootCommandGroup(), new AutomationPrepareShootCommandGroup(), 
-    () -> ShooterSubsystem.getInstance().getIR() && ShooterSubsystem.getInstance().getEncoderVelocity() == ShooterConstants.velocitySetpoint);
-    */
+
   }
 
   /**

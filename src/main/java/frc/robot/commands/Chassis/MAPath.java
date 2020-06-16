@@ -37,6 +37,9 @@ public class MAPath extends CommandBase {
   public void initialize() {
     chassis.rampRate(0.35);
     chassis.setidilmodeCoset();
+
+    Path.mainPath = Path.testPath;
+    /*
     stage = 0;
     if (SmartDashboard.getNumber("auto", 1) == 1) {
       Path.mainPath = Path.roulettePath;
@@ -52,8 +55,7 @@ public class MAPath extends CommandBase {
       } else {
         Path.mainPath = Path.roulettePath2;
       }
-
-    }
+      */
 
     chassis.setpoint(Path.mainPath[0][0], Path.mainPath[0][1], Path.mainPath[0][4], Path.mainPath[0][5]);
 
