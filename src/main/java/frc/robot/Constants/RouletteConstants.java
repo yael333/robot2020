@@ -19,10 +19,10 @@ public final class RouletteConstants {
   public static final int SolenoidID = 6;
 
   //colors (need chage real values)
-  public static final Color Red = ColorMatch.makeColor(0.561, 0.232, 0.114);
-  public static final Color Yellow = ColorMatch.makeColor(0.361, 0.524, 0.113);
-  public static final Color Green = ColorMatch.makeColor(0.197, 0.561, 0.240);
-  public static final Color Blue = ColorMatch.makeColor(0.143, 0.427, 0.429);
+  public static final Color Red = ColorMatch.makeColor(0.65, 0.28, 0.03);
+  public static final Color Yellow = ColorMatch.makeColor(0.44, 0.48, 0.07);
+  public static final Color Green = ColorMatch.makeColor(0.228760, 0.588379, 0.176514);
+  public static final Color Blue = ColorMatch.makeColor(0.195801, 0.478271, 0.325684);
 
   public static final double Kp = 1;
   public static final double Ki = 1;

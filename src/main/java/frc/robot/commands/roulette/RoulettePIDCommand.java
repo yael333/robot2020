@@ -7,9 +7,11 @@
 
 package frc.robot.commands.roulette;
 
+import frc.robot.Constants.RobotConstants;
 import frc.robot.Constants.RouletteConstants;
 
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -19,20 +21,17 @@ public class RoulettePIDCommand extends CommandBase {
 
   RouletteSubsystem rouletteSubsystem;
   int setpoint;
+  Color wantedColor;
   double lastTimeOnTarget;
   double waitTime;
 
   /**
    * Creates a new RoulettePIDCommand.
    */
-  public RoulettePIDCommand(Color wantedColor) {
+  public RoulettePIDCommand() {
     
     rouletteSubsystem = RouletteSubsystem.getInstance();
-    int OptimalWay = rouletteSubsystem.getOptimalWay(wantedColor);
     this.waitTime = RouletteConstants.PIDWaitTime;
-    
-    rouletteSubsystem.setSetpoint(rouletteSubsystem.getColorEncoder() + OptimalWay);
-    rouletteSubsystem.setReversed(OptimalWay < 0);
     
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(rouletteSubsystem);
@@ -41,7 +40,27 @@ public class RoulettePIDCommand extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    String gameData = DriverStation.getInstance().getGameSpecificMessage();
 
+    switch (gameData.charAt(0)) {
+      case 'r' :
+      wantedColor = RouletteConstants.Red;
+      break;
+    case 'b' :
+      wantedColor = RouletteConstants.Blue;
+      break;
+    case 'y':
+      wantedColor = RouletteConstants.Yellow;
+      break;
+    case 'g':
+      wantedColor = RouletteConstants.Green;
+      break;  
+    }
+    
+    int OptimalWay = rouletteSubsystem.getOptimalWay(wantedColor);
+  
+    rouletteSubsystem.setSetpoint(rouletteSubsystem.getColorEncoder() + OptimalWay);
+    rouletteSubsystem.setReversed(OptimalWay < 0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -54,6 +73,7 @@ public class RoulettePIDCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    rouletteSubsystem.setMotor(0);
   }
 
   // Returns true when the command should end.

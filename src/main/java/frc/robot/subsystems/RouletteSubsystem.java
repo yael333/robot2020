@@ -36,7 +36,7 @@ public class RouletteSubsystem extends SubsystemBase {
   private Color rouletteColors[] = {RouletteConstants.Red, RouletteConstants.Yellow, RouletteConstants.Blue, RouletteConstants.Green};
   private ColorMatchResult closestColor;
   private Color lastColor;
-  
+
   private boolean isReversed;
   private int colorEncoder = 0;
 
@@ -94,10 +94,9 @@ public class RouletteSubsystem extends SubsystemBase {
   }
 
   public int getOptimalWay(Color wantedColor) {
-    
     int currentColorIndex = LinearSearch(rouletteColors, closestColor.color);
     int wantedColorIndex = LinearSearch(rouletteColors, wantedColor);
-  
+    
     int positive_way = currentColorIndex + wantedColorIndex;
     int negative_way = currentColorIndex - (rouletteColors.length - wantedColorIndex);
 
@@ -132,7 +131,8 @@ public class RouletteSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Roulette Closest Blue:", closestColor.color.blue);
 
     SmartDashboard.putNumber("Roulette PID Setpoint", colorPID.getSetpoint());
-  }
+    SmartDashboard.putNumber("Roulette Encoder", colorEncoder);
+    }
 
   @Override
   public void periodic() {

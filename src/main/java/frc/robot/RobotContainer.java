@@ -86,7 +86,7 @@ public class RobotContainer {
     yButton.whileHeld(new ConveyorMoveCommand(0.5));
 
     l1Button.whileHeld(new ShooterConveyorCommand(0.5));
-    r1Button.whileHeld(new RoulettePIDCommand(RouletteConstants.Yellow)); 
+    r1Button.whileHeld(new RoulettePIDCommand()); 
 
     r2.whileActiveContinuous(new ShooterPIDCommand(2000));
     l2.whileActiveOnce(new AutomationShooterCommand());
