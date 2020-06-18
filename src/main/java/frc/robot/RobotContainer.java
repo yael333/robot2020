@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Robot;
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.RouletteConstants;
 import frc.robot.commands.Chassis.MAPath;
 import frc.robot.commands.automation.AutomationCollectionCommand;
 import frc.robot.commands.automation.AutomationShooterCommand;
@@ -19,6 +20,7 @@ import frc.robot.commands.conveyor.ConveyorMoveCommand;
 import frc.robot.commands.elevator.ElevatorDoubleSolenoidCommand;
 import frc.robot.commands.intake.IntakeDoubleSolenoid;
 import frc.robot.commands.intake.IntakeMoveCommand;
+import frc.robot.commands.roulette.RoulettePIDCommand;
 import frc.robot.commands.roulette.RouletteSolenoidCommand;
 import frc.robot.commands.shooter.ShooterConveyorCommand;
 import frc.robot.commands.shooter.ShooterPIDCommand;
@@ -84,7 +86,7 @@ public class RobotContainer {
     yButton.whileHeld(new ConveyorMoveCommand(0.5));
 
     l1Button.whileHeld(new ShooterConveyorCommand(0.5));
-    r1Button.whileHeld(new MAPath(0)); 
+    r1Button.whileHeld(new RoulettePIDCommand(RouletteConstants.Yellow)); 
 
     r2.whileActiveContinuous(new ShooterPIDCommand(2000));
     l2.whileActiveOnce(new AutomationShooterCommand());

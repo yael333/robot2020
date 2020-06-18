@@ -64,8 +64,12 @@ public class RouletteSubsystem extends SubsystemBase {
     return rouletteColorSensor.getColor();
   }
 
-  public double getPID(int setpoint) {
-    return MathUtil.clamp(colorPID.calculate(colorEncoder, setpoint), -1, 1);
+  public void  setSetpoint(int setpoint) {
+    colorPID.setSetpoint(setpoint);
+  }
+
+  public double getPID() {
+    return MathUtil.clamp(colorPID.calculate(colorEncoder), -1, 1);
   }
 
   public boolean atSetpoint() {
@@ -126,6 +130,8 @@ public class RouletteSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Roulette Closest Red:", closestColor.color.red);
     SmartDashboard.putNumber("Roulette Closest Green:", closestColor.color.green);
     SmartDashboard.putNumber("Roulette Closest Blue:", closestColor.color.blue);
+
+    SmartDashboard.putNumber("Roulette PID Setpoint", colorPID.getSetpoint());
   }
 
   @Override

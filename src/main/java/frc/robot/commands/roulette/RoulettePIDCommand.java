@@ -11,6 +11,7 @@ import frc.robot.Constants.RouletteConstants;
 
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.RouletteSubsystem;
 
@@ -28,9 +29,9 @@ public class RoulettePIDCommand extends CommandBase {
     
     rouletteSubsystem = RouletteSubsystem.getInstance();
     int OptimalWay = rouletteSubsystem.getOptimalWay(wantedColor);
-    this.setpoint = rouletteSubsystem.getColorEncoder() + OptimalWay;
     this.waitTime = RouletteConstants.PIDWaitTime;
     
+    rouletteSubsystem.setSetpoint(rouletteSubsystem.getColorEncoder() + OptimalWay);
     rouletteSubsystem.setReversed(OptimalWay < 0);
     
     // Use addRequirements() here to declare subsystem dependencies.
@@ -46,7 +47,7 @@ public class RoulettePIDCommand extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double power = 0.5; //setpoint
+    double power = 0.5; //rouletteSubsystem.getPID();
     rouletteSubsystem.setMotor(power);
   }
 
