@@ -7,26 +7,25 @@
 
 package frc.robot.subsystems;
 
+/**
+ * @author yuval rader
+ */
+
 import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.AlternateEncoderType;
-import com.revrobotics.CANEncoder;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.wpilibj.SPI.Port;
-import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpiutil.math.MathUtil;
-import frc.robot.Constants.ConstantsChassis;
-import frc.robot.Robot;
+import frc.robot.utils.*;
 import frc.robot.Path.Path;
 import frc.robot.commands.Chassis.MAPath;
+import frc.robot.utils.RobotConstants.motorType;
+import frc.robot.utils.RobotConstants.encoderType;
 
 /**
  * An example subsystem. You can replace me with your own Subsystem.
  */
 public class Chassis extends SubsystemBase {
-  private static final double kLimelight3D = 25.625 * 2.54; // TODO
 
   private static final double KP_MApath_distance = 40e-6;
   private static final double KI_MApath_distance = 0;
@@ -36,140 +35,114 @@ public class Chassis extends SubsystemBase {
   private static final double KI_MApath_angle = 0;
   private static final double KD_MApath_angle = 1e-3;
 
-  private static final double KP_Vision_angle = 25e-3;
+  private static final double KP_Vision_angle = 2.5e-2;
   private static final double KI_Vision_angle = 8e-4;
   private static final double KD_Vision_angle = 1e-3;
 
-  private static final double KP_Vision_distance = 16e-3;
+  private static final double KP_Vision_distance = 1.6e-2;
   private static final double KI_Vision_distance = 0;
   private static final double KD_Vision_distance = 0;
 
-  private static final double KP_right_velocity_control = 12e-4;
+  private static final double KP_right_velocity_control = 1.2e-3;
   private static final double KI_right_velocity_control = 0;
   private static final double KD_right_velocity_control = 0;
 
-  private static final double KP_left_velocity_control = 12e-4;
+  private static final double KP_left_velocity_control = 1.2e-3;
   private static final double KI_left_velocity_control = 0;
   private static final double KD_left_velocity_control = 0;
-  
+
   private static final double anglePIDVisionSetInputRange = 44.5;
   private static final double anglePidMApathSetInputRange = 180;
 
-  public static double ticksPerMeter = 22000; // the number of ticks per meter //TODO
-  public static double RPM = 5700;
   private double angle;
   private double sign;
   private double modle = sign;
 
-  private static Chassis chassis;
+  private MAMotorControler leftFrontMotor;
+  private MAMotorControler leftMotor;
 
-  private CANSparkMax leftFrontMotor;
-  private CANSparkMax leftMotor;
-
-  private CANSparkMax rightFrontMotor;
-  private CANSparkMax rightMotor;
-
-  private CANEncoder canEncoderRightCIMcoder;
-  private CANEncoder canEncoderLeftCIMcoder;
-
-  private CANEncoder canEncoderleft;
-  private CANEncoder canEncoderRight;
+  private MAMotorControler rightFrontMotor;
+  private MAMotorControler rightMotor;
 
   private AHRS navx;
 
-  private PIDController distancePidMApath; // PID controler of the distance in the pathfinder
-  private PIDController anglePidMApath; // PID controler of the angel in the pathfinder
-  private PIDController leftvelocityControl;
-  private PIDController rightvelocityControl;
-  private PIDController anglePIDVision; // the angel PID in the vison PID
-  private PIDController distancePIDVision;
+  private MAPidController distancePidMApath; // PID controler of the distance in the pathfinder
+  private MAPidController anglePidMApath; // PID controler of the angel in the pathfinder
+
+  private MAPidController leftvelocityControl;
+  private MAPidController rightvelocityControl;
+
+  private MAPidController anglePIDVision; // the angel PID in the vison PID
+  private MAPidController distancePIDVision;
+
+  private static Chassis chassis;
 
   private Chassis() {
 
-    leftFrontMotor = new CANSparkMax(ConstantsChassis.LEFT_FRONT_MOTOR,
-        com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-    leftMotor = new CANSparkMax(ConstantsChassis.LEFT_MOTOR, com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    leftFrontMotor = new MAMotorControler(motorType.SPARK_MAX, RobotConstants.m_ID1, encoderType.Encoder, null,
+        60, true, 0);
+    leftMotor = new MAMotorControler(motorType.SPARK_MAX, RobotConstants.m_ID2, encoderType.Alternate_Encoder,
+        null, 60, true, 0);
 
-    rightFrontMotor = new CANSparkMax(ConstantsChassis.RIGHT_FRONT_MOTOR,
-        com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
-    rightMotor = new CANSparkMax(ConstantsChassis.RIGHT_MOTOR,
-        com.revrobotics.CANSparkMaxLowLevel.MotorType.kBrushless);
+    rightFrontMotor = new MAMotorControler(motorType.SPARK_MAX, RobotConstants.m_ID3, encoderType.Encoder, null,
+        60, false, 0);
+    rightMotor = new MAMotorControler(motorType.SPARK_MAX, RobotConstants.m_ID4, encoderType.Alternate_Encoder,
+        null, 60, false, 0);
 
-    rightFrontMotor.setSmartCurrentLimit(60);
-    rightMotor.setSmartCurrentLimit(60);
-    leftFrontMotor.setSmartCurrentLimit(60);
-    leftMotor.setSmartCurrentLimit(60);
-
-    canEncoderLeftCIMcoder = leftMotor.getAlternateEncoder(AlternateEncoderType.kQuadrature, 1);
-    canEncoderRightCIMcoder = rightMotor.getAlternateEncoder(AlternateEncoderType.kQuadrature, 1);
-    canEncoderRightCIMcoder.setInverted(true);
-    canEncoderLeftCIMcoder.setInverted(false);
-
-    canEncoderRight = rightFrontMotor.getEncoder();
-    canEncoderleft = leftFrontMotor.getEncoder();
-
-    canEncoderRightCIMcoder.setPositionConversionFactor(1);
-    canEncoderLeftCIMcoder.setPositionConversionFactor(1);
-
-    canEncoderRight.setVelocityConversionFactor(1);
-    canEncoderleft.setVelocityConversionFactor(1);
-
-    leftMotor.follow(leftFrontMotor);
-    rightMotor.follow(rightFrontMotor);
-
-    leftMotor.setInverted(true);
-    leftFrontMotor.setInverted(true);
-    rightMotor.setInverted(false);
-    rightFrontMotor.setInverted(false);
+    leftMotor.followSparkMax(leftFrontMotor);
+    rightMotor.followSparkMax(rightFrontMotor);
 
     navx = new AHRS(Port.kMXP);
 
     // the distance PID Pathfinder
-    distancePidMApath = new PIDController(KP_MApath_distance, KI_MApath_distance, KD_MApath_distance);
+    distancePidMApath = new MAPidController(KP_MApath_distance, KI_MApath_distance, KD_MApath_distance, 0, 0, -1, 1);
 
     // the angel PID pathfinder
-    anglePidMApath = new PIDController(KP_MApath_angle, KI_MApath_angle, KD_MApath_angle);
+    anglePidMApath = new MAPidController(KP_MApath_angle, KI_MApath_angle, KD_MApath_angle, 0, 0, -1, 1);
 
     // the angel PID vison
-    anglePIDVision = new PIDController(KP_Vision_angle, KI_Vision_angle, KD_Vision_angle);
-    anglePIDVision.setTolerance(2);
+    anglePIDVision = new MAPidController(KP_Vision_angle, KI_Vision_angle, KD_Vision_angle, 0, 2, -1, 1);
 
     anglePIDVision.enableContinuousInput(-anglePIDVisionSetInputRange, anglePIDVisionSetInputRange);
 
     anglePidMApath.enableContinuousInput(-anglePidMApathSetInputRange, anglePidMApathSetInputRange);
-    leftvelocityControl = new PIDController(KP_left_velocity_control, KI_left_velocity_control,
-        KD_left_velocity_control);
-    rightvelocityControl = new PIDController(KP_right_velocity_control, KI_right_velocity_control,
-        KD_right_velocity_control);
-    distancePIDVision = new PIDController(KP_Vision_distance, KI_Vision_distance, KD_Vision_distance);
+
+    leftvelocityControl = new MAPidController(KP_left_velocity_control, KI_left_velocity_control,
+        KD_left_velocity_control, 0, 0, -12, 12);
+
+    rightvelocityControl = new MAPidController(KP_right_velocity_control, KI_right_velocity_control,
+        KD_right_velocity_control, 0, 0, -12, 12);
+
+    distancePIDVision = new MAPidController(KP_Vision_distance, KI_Vision_distance, KD_Vision_distance, 0, 2, -1, 1);
   }
 
   public double leftvelocityControl(double setPoint) {
-    double kf = setPoint / RPM;
-    return MathUtil.clamp(leftvelocityControl.calculate(lefttVelocityControlRPM(), setPoint) + kf, -12, 12);
+    leftvelocityControl.setF(setPoint / RobotConstants.Neo_RPM);
+    return leftvelocityControl.calculate(lefttVelocityControlRPM(), setPoint);
   }
 
   public double rightvelocityControl(double setPoint) {
-    double kf = setPoint / RPM;
-    return MathUtil.clamp(rightvelocityControl.calculate(rightVelocityControlRPM(), setPoint) + kf, -12, 12);
+    leftvelocityControl.setF(setPoint / RobotConstants.Neo_RPM);
+    return leftvelocityControl.calculate(lefttVelocityControlRPM(), setPoint);
   }
 
   public double lefttVelocityControlRPM() {
-    return canEncoderleft.getVelocity();
+    return leftFrontMotor.getVelocity();
   }
 
   public double rightVelocityControlRPM() {
-    return canEncoderRight.getVelocity();
+    return rightFrontMotor.getVelocity();
   }
 
   // updat the value in the smart dash bord
   public void value() {
+
     SmartDashboard.putNumber("fixedAngle", fixedAngle());
     SmartDashboard.putNumber("stage", MAPath.stage);
-    SmartDashboard.putNumber("distacne", average() / ticksPerMeter);
+    SmartDashboard.putNumber("distacne", average() / RobotConstants.ticksPerMeter);
     SmartDashboard.putNumber("angelSetPoint", anglePidMApath.getSetpoint());
-    SmartDashboard.putBoolean("PIDvisonOnTarget", anglePIDVision.atSetpoint());
-    SmartDashboard.putNumber("DistanceSetPoint", distancePidMApath.getSetpoint() / ticksPerMeter);
+    SmartDashboard.putBoolean("PIDvisonOnTarget", anglePIDVision.atSetpoint(0.1));
+    SmartDashboard.putNumber("DistanceSetPoint", distancePidMApath.getSetpoint() / RobotConstants.ticksPerMeter);
     SmartDashboard.putNumber("Distancevison", distance());
 
     SmartDashboard.putNumber("leftRPM", lefttVelocityControlRPM());
@@ -178,45 +151,39 @@ public class Chassis extends SubsystemBase {
     SmartDashboard.putNumber("leftRPMSetPoint", rightvelocityControl.getSetpoint());
     SmartDashboard.putNumber("rightRPMSetpoint", leftvelocityControl.getSetpoint());
 
-    SmartDashboard.putNumber("leftPowet", leftFrontMotor.get());
-    SmartDashboard.putNumber("rightpower", rightFrontMotor.get());
+    SmartDashboard.putNumber("leftPowet", leftFrontMotor.getOutput());
+    SmartDashboard.putNumber("rightpower", rightFrontMotor.getOutput());
   }
 
   public void rampRate(double rampRate) {
-    rightFrontMotor.setOpenLoopRampRate(rampRate);
-    rightMotor.setOpenLoopRampRate(0);
-    leftFrontMotor.setOpenLoopRampRate(rampRate);
-    leftMotor.setOpenLoopRampRate(0);
+    rightFrontMotor.configRampRate(rampRate);
+    rightMotor.configRampRate(0);
+    leftFrontMotor.configRampRate(rampRate);
+    leftMotor.configRampRate(0);
   }
 
   // the average of the encoders
   public double average() {
-    return (canEncoderRightCIMcoder.getPosition() + canEncoderLeftCIMcoder.getPosition()) / 2;
+    return (rightMotor.getPosition() + rightMotor.getPosition()) / 2;
   }
 
   public double fixedAngle() {
-    try {
+    if (navx.getYaw() != 0) {
       angle = navx.getYaw();
       sign = angle / Math.abs(angle);
       modle = sign * (Math.abs(angle) % 360);
       return -((180 - modle) % 360) + 180;
-    } catch (Exception e) {
+    } else {
       return 0;
     }
+
   }
 
-  public void setidilmodeCoset() {
-    leftFrontMotor.setIdleMode(IdleMode.kCoast);
-    leftMotor.setIdleMode(IdleMode.kCoast);
-    rightFrontMotor.setIdleMode(IdleMode.kCoast);
-    rightMotor.setIdleMode(IdleMode.kCoast);
-  }
-
-  public void setidilmodeBrake() {
-    leftFrontMotor.setIdleMode(IdleMode.kBrake);
-    leftMotor.setIdleMode(IdleMode.kBrake);
-    rightFrontMotor.setIdleMode(IdleMode.kBrake);
-    rightMotor.setIdleMode(IdleMode.kBrake);
+  public void setidilmodeBrake(boolean onOf) {
+    leftFrontMotor.changeMood(onOf);
+    leftMotor.changeMood(onOf);
+    rightFrontMotor.changeMood(onOf);
+    rightMotor.changeMood(onOf);
   }
 
   // set the left and the right motors powers
@@ -228,13 +195,14 @@ public class Chassis extends SubsystemBase {
   // resat the value of the encoder and the navx
   public void resetValue() {
     navx.reset();
-    canEncoderLeftCIMcoder.setPosition(0);
-    canEncoderRightCIMcoder.setPosition(0);
+    leftMotor.resetEncoder();
+    rightMotor.resetEncoder();
   }
 
   // pid vison distance
   public double distance() {
-    return (-1.3276 * Math.pow(10, 6) / (-2.43018 * Math.pow(Robot.y, 2) + -101.265 * Robot.y + -1854.19)); // TODO
+    return (-1.3276 * Math.pow(10, 6)
+        / (-2.43018 * Math.pow(limelight.getinstance().y, 2) + -101.265 * limelight.getinstance().y + -1854.19)); // TODO
 
   }
 
@@ -244,11 +212,11 @@ public class Chassis extends SubsystemBase {
   }
 
   public double anglePIDVisionOutput(double setpoint) {
-    return MathUtil.clamp(anglePIDVision.calculate(Robot.x * -1, setpoint), -1, 1);
+    return anglePIDVision.calculate(limelight.getinstance().x * -1, setpoint);
   }
 
   public double distancePIDVisionOutput(double setpoint) {
-    return MathUtil.clamp(distancePIDVision.calculate(Robot.tshort, setpoint), -1, 1);
+    return distancePIDVision.calculate(limelight.getinstance().Tshort, setpoint);
   }
 
   public void ArcadeDrive(double angel, double distacne) {
@@ -258,13 +226,17 @@ public class Chassis extends SubsystemBase {
   }
 
   // the PIDvison
-  public void PIDvision(double angleSetpoint) {
+  public void PIDvisionAngle(double angleSetpoint) {
     double power = anglePIDVisionOutput(angleSetpoint);
     tankDrive(-power, power);
   }
 
-  public boolean isPIDVisionOnTarget() {
-    return anglePIDVision.atSetpoint();
+  public boolean isPIDVisionOnTargetAngle() {
+    return anglePIDVision.atSetpoint(0.1);
+  }
+
+  public boolean isPIDVisionOnTargetDistance() {
+    return distancePIDVision.atSetpoint(0.1);
   }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -272,7 +244,7 @@ public class Chassis extends SubsystemBase {
   public void setpoint(double distancesetpoint, double anglesetpoint, double Speedlimitdistance,
       double Speedlimitangle) {
     anglePidMApath.setSetpoint(anglesetpoint);
-    distancePidMApath.setSetpoint(distancesetpoint * ticksPerMeter);
+    distancePidMApath.setSetpoint(distancesetpoint * RobotConstants.ticksPerMeter);
 
     distancePidMApath.setP(KP_MApath_distance * Speedlimitdistance);
     distancePidMApath.setD(KD_MApath_distance * Speedlimitdistance);
@@ -310,11 +282,11 @@ public class Chassis extends SubsystemBase {
   }
 
   public void leftcontrol(double power) {
-    leftFrontMotor.setVoltage(power);
+    leftFrontMotor.setvoltage(power);
   }
 
   public void rightcontrol(double power) {
-    rightFrontMotor.setVoltage(power);
+    rightFrontMotor.setvoltage(power);
   }
 
   public static Chassis getinstance() {

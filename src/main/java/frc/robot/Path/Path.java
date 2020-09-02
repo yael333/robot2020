@@ -56,15 +56,5 @@ public class Path {
         new double[]{-1.6, -145, 0.3, 4, 1 , 1},
       };
 
-      public static double[][] testPath = {
-        new double[]{3, 0, 0.05, 2, 1 , 1},
-        new double[]{3, 90, 0.05, 2, 0, 1},
-
-        new double[]{6, 0, 0.05, 2, 1 , 1},
-        new double[]{6, 90, 0.05, 2, 0, 1},
-        
-        new double[]{9, 0, 0.05, 2, 1, 1},
-      };
-
 
 }

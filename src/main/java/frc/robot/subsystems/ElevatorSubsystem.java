@@ -7,7 +7,7 @@
 
 package frc.robot.subsystems;
 
-import frc.robot.Constants.RobotConstants;
+import frc.robot.utils.RobotConstants;
 import frc.robot.Constants.ElevatorConstants;
 
 import com.revrobotics.CANEncoder;

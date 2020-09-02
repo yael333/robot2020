@@ -8,9 +8,14 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants.ClimbBalanceConstants;
+import frc.robot.utils.RobotConstants;
+import frc.robot.utils.RobotConstants.motorType;
+
+import frc.robot.utils.MAMotorControler;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,13 +23,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ClimbBalanceSubsystem extends SubsystemBase {
 
   private static ClimbBalanceSubsystem climbBalanceSubsystem;
-  private CANSparkMax balanceSMX;
+  private MAMotorControler balanceSMX;
 
   /**
    * Creates a new ClimbBalanceSubsystem.
    */
   private ClimbBalanceSubsystem() {
-    balanceSMX = new CANSparkMax(ClimbBalanceConstants.SparkMaxID, MotorType.kBrushless);
+    balanceSMX = new MAMotorControler(motorType.SPARK_MAX, RobotConstants.m_ID9);
   }
 
   public void setMotor(double power) {
@@ -39,7 +44,7 @@ public class ClimbBalanceSubsystem extends SubsystemBase {
   }
 
   public void printDashBoard() {
-    SmartDashboard.putNumber("Balance SMX speed:", balanceSMX.get());
+    SmartDashboard.putNumber("Balance SMX speed:", balanceSMX.getOutput());
   }
 
   @Override

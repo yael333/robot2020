@@ -5,28 +5,23 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.roulette;
+package frc.robot.utils;
 
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import frc.robot.subsystems.RouletteSubsystem;
+import frc.robot.subsystems.Automation;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class RouletteSolenoidCommand extends InstantCommand {
-
-  RouletteSubsystem rouletteSubsystem;
-
-  public RouletteSolenoidCommand() {
-    rouletteSubsystem = RouletteSubsystem.getInstance();
-
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(rouletteSubsystem);
+public class StopAll extends InstantCommand {
+  public StopAll() {
+    addRequirements(Automation.getinstance());
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    rouletteSubsystem.setSolenoid(!rouletteSubsystem.getSolenoid());
+    CommandScheduler.getInstance().cancelAll();
   }
 }

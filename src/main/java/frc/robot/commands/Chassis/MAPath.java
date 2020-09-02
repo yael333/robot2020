@@ -7,18 +7,22 @@
 
 package frc.robot.commands.Chassis;
 
-
+/**
+ * @author yuval rader
+ */
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Path.Path;
 import frc.robot.subsystems.Chassis;
+import frc.robot.utils.RobotConstants;
 
 public class MAPath extends CommandBase {
   /**
    * Creates a new MAPath.
    */
 
-  Chassis chassis;
+  private Chassis chassis;
   public static int stage = 0;
   public static int pathnum = 0;
   private double lastTimeOnTarget;
@@ -34,11 +38,8 @@ public class MAPath extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    chassis.rampRate(0.35);
-    chassis.setidilmodeCoset();
-
-    Path.mainPath = Path.testPath;
-    /*
+    chassis.rampRate(RobotConstants.Ramp_Rate_Auto);
+    chassis.setidilmodeBrake(false);
     stage = 0;
     if (SmartDashboard.getNumber("auto", 1) == 1) {
       Path.mainPath = Path.roulettePath;
@@ -54,7 +55,8 @@ public class MAPath extends CommandBase {
       } else {
         Path.mainPath = Path.roulettePath2;
       }
-      */
+
+    }
 
     chassis.setpoint(Path.mainPath[0][0], Path.mainPath[0][1], Path.mainPath[0][4], Path.mainPath[0][5]);
 
@@ -65,29 +67,27 @@ public class MAPath extends CommandBase {
   public void execute() {
     chassis.pathfinder();
 
-    try {
-      if (Math.abs(chassis.distanceEror()) < Path.mainPath[stage][2] * chassis.ticksPerMeter
+    if (MAPath.stage <= Path.mainPath.length - 1) {
+      if (Math.abs(chassis.distanceEror()) < Path.mainPath[stage][2] * RobotConstants.ticksPerMeter
           && Math.abs(chassis.angleEror()) < Path.mainPath[stage][3]) {
         stage++;
         chassis.setpoint(Path.mainPath[stage][0], Path.mainPath[stage][1], Path.mainPath[stage][4],
             Path.mainPath[stage][5]);
       }
-    } catch (Exception e) {
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println(interrupted);
     if (interrupted) {
       chassis.tankDrive(0, 0);
-      chassis.setidilmodeBrake();
+      chassis.setidilmodeBrake(true);
     } else {
 
       pathnum++;
       chassis.tankDrive(0, 0);
-      chassis.setidilmodeBrake();
+      chassis.setidilmodeBrake(true);
     }
   }
 
@@ -95,12 +95,12 @@ public class MAPath extends CommandBase {
   @Override
   public boolean isFinished() {
 
-    if (!(Math.abs(chassis.distanceEror()) < Path.mainPath[Path.mainPath.length - 1][2] * chassis.ticksPerMeter
+    if (!(Math.abs(chassis.distanceEror()) < Path.mainPath[Path.mainPath.length - 1][2] * RobotConstants.ticksPerMeter
         && Math.abs(chassis.angleEror()) < Path.mainPath[Path.mainPath.length - 1][3]
         && stage == Path.mainPath.length)) {
       lastTimeOnTarget = Timer.getFPGATimestamp();
     }
-    return Math.abs(chassis.distanceEror()) < Path.mainPath[Path.mainPath.length - 1][2] * chassis.ticksPerMeter
+    return Math.abs(chassis.distanceEror()) < Path.mainPath[Path.mainPath.length - 1][2] * RobotConstants.ticksPerMeter
         && Math.abs(chassis.angleEror()) < Path.mainPath[Path.mainPath.length - 1][3] && stage == Path.mainPath.length
         && Timer.getFPGATimestamp() - lastTimeOnTarget > waitTime;
   }

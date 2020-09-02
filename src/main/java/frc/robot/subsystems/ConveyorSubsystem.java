@@ -8,6 +8,9 @@
 package frc.robot.subsystems;
 
 import frc.robot.Constants.ConveyorConstants;
+import frc.robot.utils.RobotConstants;
+import frc.robot.utils.RobotConstants.motorType;
+import frc.robot.utils.MAMotorControler;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -18,17 +21,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ConveyorSubsystem extends SubsystemBase {
 
   private static ConveyorSubsystem conveyorSubsystem;
-  private TalonSRX conveyorTalon;
+  private MAMotorControler conveyorTalon;
 
   /**
    * Creates a new ConveyorSubsystem.
    */
   private ConveyorSubsystem() {
-    conveyorTalon = new TalonSRX(ConveyorConstants.TalonID);
+    conveyorTalon = new MAMotorControler(motorType.TALON, RobotConstants.m_ID11);
   }
 
   public void setMotor(double power) {
-    conveyorTalon.set(ControlMode.PercentOutput, power);
+    conveyorTalon.set( power);
   }
 
   public double getCurrent() {

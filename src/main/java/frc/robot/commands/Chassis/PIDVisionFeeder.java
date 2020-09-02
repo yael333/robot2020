@@ -7,22 +7,15 @@
 
 package frc.robot.commands.Chassis;
 
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Robot;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.Chassis;
-
+import frc.robot.utils.limelight;
 
 public class PIDVisionFeeder extends CommandBase {
 
   private Chassis chassis;
- 
 
   public PIDVisionFeeder() {
-   
-
     chassis = Chassis.getinstance();
     addRequirements(chassis);
   }
@@ -30,10 +23,10 @@ public class PIDVisionFeeder extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(0);
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(1);
+    limelight.getinstance().camMode(0);
+    limelight.getinstance().pipeline(1);
     chassis.rampRate(0);
-    chassis.setidilmodeBrake();
+    chassis.setidilmodeBrake(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -42,39 +35,21 @@ public class PIDVisionFeeder extends CommandBase {
 
     double angel = chassis.anglePIDVisionOutput(0);
     double distacne = chassis.distancePIDVisionOutput(66);
-    if(Robot.tshort > 2){
-      chassis.ArcadeDrive(angel, distacne);
-    }else{
-      chassis.tankDrive(0, 0);
-    }
-  
-
-    // chassis.PIDvision(angle);
+    chassis.ArcadeDrive(angel, distacne);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(1);
-    if (interrupted) {
-      chassis.tankDrive(0, 0);
-      chassis.reset();
-      chassis.setidilmodeBrake();
-    } else {
-      chassis.tankDrive(0, 0);
-      chassis.reset();
-      chassis.setidilmodeBrake();
-    }
+    limelight.getinstance().camMode(1);
+    chassis.tankDrive(0, 0);
+    chassis.reset();
+    chassis.setidilmodeBrake(true);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    /*
-     * if (!chassis.isPIDVisionOnTarget()) { lastTimeOnTarget =
-     * Timer.getFPGATimestamp(); } return chassis.isPIDVisionOnTarget() &&
-     * Timer.getFPGATimestamp() - lastTimeOnTarget > waitTime; }
-     */
-    return false;
+    return chassis.isPIDVisionOnTargetDistance();
   }
 }

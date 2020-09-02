@@ -7,73 +7,48 @@
 
 package frc.robot;
 
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
 import frc.robot.commands.Chassis.MAPath;
-import frc.robot.commands.Chassis.tankDrive;
-import frc.robot.commands.elevator.ElevatorMoveCommand;
 import frc.robot.subsystems.Chassis;
-import frc.robot.subsystems.ClimbBalanceSubsystem;
-import frc.robot.subsystems.ConveyorSubsystem;
-import frc.robot.subsystems.ElevatorSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.RouletteSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.test;
 
+/**
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to each mode, as described in the TimedRobot
+ * documentation. If you change the name of this class or the package after
+ * creating this project, you must also update the build.gradle file in the
+ * project.
+ */
 public class Robot extends TimedRobot {
-
-  private tankDrive tankDrive = new tankDrive();
-
   private Command m_autonomousCommand;
-  public static double x;
-  public static double y;
-  public static double tshort;
-  public static double yaw1;
-  public static double distanceFromTargetLimelightX;
-  public static double distanceFromTargetLimelightY;
-  public static int path;
+  //private frc.robot.commands.Chassis.tankDrive tankDrive = new frc.robot.commands.Chassis.tankDrive();
   private RobotContainer m_robotContainer;
 
-
-
+  /**
+   * This function is run when the robot is first started up and should be used
+   * for any initialization code.
+   */
   @Override
   public void robotInit() {
-    MAPath.pathnum = 0;
     m_robotContainer = new RobotContainer();
-
-    IntakeSubsystem.getInstance();
-    RouletteSubsystem.getInstance();
-    ElevatorSubsystem.getInstance();
-    ConveyorSubsystem.getInstance();
-    ClimbBalanceSubsystem.getInstance();
-    ShooterSubsystem.getInstance();
+    test.getinstance();
   }
 
+  /**
+   * This function is called every robot packet, no matter the mode. Use this for
+   * items like diagnostics that you want ran during disabled, autonomous,
+   * teleoperated and test.
+   *
+   * <p>
+   * This runs after the mode specific periodic functions, but before LiveWindow
+   * and SmartDashboard integrated updating.
+   */
   @Override
   public void robotPeriodic() {
 
     CommandScheduler.getInstance().run();
-    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-    NetworkTableEntry tx = table.getEntry("tx");
-    NetworkTableEntry ty = table.getEntry("ty");
-    NetworkTableEntry yaw = table.getEntry("camtran");
-    NetworkTableEntry Tshort = table.getEntry("tshort");
-
-    // read values periodically
-    x = tx.getDouble(0.0);
-    y = ty.getDouble(0.0);
-    tshort = Tshort.getDouble(0.0);
-    yaw1 = yaw.getDoubleArray(new double[] { 0, 0, 0, 0, 0, 0, 0 })[4];
-    distanceFromTargetLimelightX = yaw.getDoubleArray(new double[] { 0, 0, 0, 0, 0, 0 })[0];
-    distanceFromTargetLimelightY = yaw.getDoubleArray(new double[] { 0, 0, 0, 0, 0, 0 })[2];
-
-    
-
   }
 
   /**
@@ -81,8 +56,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void disabledInit() {
-    Chassis.getinstance().setidilmodeCoset();
-    CommandScheduler.getInstance().cancelAll();
+    //Chassis.getinstance().setidilmodeBrake(true);
   }
 
   @Override
@@ -95,9 +69,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-
-    MAPath.pathnum = 0;
-    Chassis.getinstance().resetValue();
+    //MAPath.pathnum = 0;
+   // Chassis.getinstance().resetValue();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -115,20 +88,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(0);
-    CommandScheduler.getInstance().setDefaultCommand(Chassis.getinstance(), tankDrive);
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("camMode").setNumber(0);
-
-    Chassis.getinstance().setidilmodeBrake();
+    //Chassis.getinstance().rampRate(0);
+   // CommandScheduler.getInstance().setDefaultCommand(Chassis.getinstance(), tankDrive);
+    
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    Chassis.getinstance().resetValue();
-    Chassis.getinstance().rampRate(0);
-
-    CommandScheduler.getInstance().setDefaultCommand(ElevatorSubsystem.getInstance(), new ElevatorMoveCommand());
-    //CommandScheduler.getInstance().setDefaultCommand(ClimbBalanceSubsystem.getInstance() , new ClimbBalanceMoveCommand());
   }
 
   /**

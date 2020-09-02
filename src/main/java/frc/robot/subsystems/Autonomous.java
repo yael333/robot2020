@@ -6,7 +6,6 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.subsystems;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -15,13 +14,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class Autonomous extends SubsystemBase {
   /**
-   * Creates a new Autonomous.
+   * s Creates a new Autonomous.
    */
+
+  private static Autonomous auto;
+
   public Autonomous() {
 
   }
-
-  private static Autonomous auto;
 
   public static Autonomous getInstance() {
     if (auto == null) {
